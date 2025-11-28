@@ -78,6 +78,8 @@ export const initiatePesapalPayment = async (req, res) => {
         }
 
         const orderRequest = {
+            // Pesapal requires a merchant reference field (unique per merchant)
+            merchant_reference: orderId,
             id: orderId,
             currency: 'KES',
             amount: amount,
@@ -90,6 +92,7 @@ export const initiatePesapalPayment = async (req, res) => {
             },
         };
 
+        console.log('Pesapal SubmitOrderRequest payload:', orderRequest);
         const orderResponse = await axios.post(
             `${PESAPAL_BASE}/api/Transactions/SubmitOrderRequest`,
             orderRequest,
