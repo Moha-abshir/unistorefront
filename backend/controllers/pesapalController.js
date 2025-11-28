@@ -194,7 +194,7 @@ export const handlePesapalCallback = async (req, res) => {
                 // update status to Processing
                 await Order.findByIdAndUpdate(order._id, { status: 'Processing' });
             }
-            return res.redirect(`/order-confirmation?orderId=${OrderMerchantReference}`);
+            return res.redirect(`https://muzafey.online/order-confirmation?orderId=${OrderMerchantReference}`);
         }
 
         // failed or other non-success statuses: remove the pending order so it doesn't go through
@@ -204,7 +204,7 @@ export const handlePesapalCallback = async (req, res) => {
         } catch (delErr) {
             console.error('Error deleting order after failed Pesapal payment:', delErr.message);
         }
-        return res.redirect(`/payment-failed?orderId=${OrderMerchantReference}`);
+        return res.redirect(`https://muzafey.online/payment-failed?orderId=${OrderMerchantReference}`);
 
     } catch (error) {
         console.error("❌ Pesapal Callback Error:", error.response?.data || error.message);
