@@ -41,8 +41,8 @@ app.use(
       "https://unistore-osi4.onrender.com",
       "https://muzamilafey.digital",
       "https://www.muzamilafey.digital",
-      "https://www.muzafey.digital",
-      "https://www.muzafey.digital",
+      "https://www.muzafey.online",
+      "https://www.muzafey.online",
        // local dev
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
