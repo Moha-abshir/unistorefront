@@ -1,0 +1,2 @@
+.featured-cats { display:flex; gap:12px; flex-wrap:wrap; margin:18px 0; justify-content:center }
+.cat-pill { display:inline-block; padding:10px 16px; border-radius:18px; background:linear-gradient(90deg,#fff,#fffaf0); color:#333; text-decoration:none; border:1px solid #ffeee0; font-weight:600 }

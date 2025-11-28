@@ -1,0 +1,8 @@
+.products-page { padding:40px 20px; max-width:1200px; margin:0 auto }
+.products-page-inner h2 { margin-bottom:20px }
+.products-filters { display:flex; gap:12px; margin-bottom:20px }
+.products-search { flex:1; padding:10px 14px; border:1px solid #ddd; border-radius:8px; font-size:14px }
+.products-category-select { padding:10px 14px; border:1px solid #ddd; border-radius:8px; font-size:14px }
+.products-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:14px }
+
+@media (max-width:768px) { .products-filters{flex-direction:column} }

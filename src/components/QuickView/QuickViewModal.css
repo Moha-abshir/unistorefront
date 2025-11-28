@@ -1,0 +1,40 @@
+.qv-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.qv-card {
+  background: #fff;
+  width: 900px;
+  max-width: 100%;
+  display: flex;
+  gap: 18px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.qv-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.qv-left { flex: 1; padding: 18px; display:flex; align-items:center; justify-content:center; background:#fafafa }
+.qv-left img { max-width:100%; border-radius:8px }
+.qv-right { flex: 1; padding: 22px }
+.qv-price { font-weight:800; font-size:20px; margin:8px 0 }
+.qv-desc { color:#444; margin-bottom:16px }
+.qv-actions { display:flex; gap:12px }
+.qv-btn { padding:10px 16px; border-radius:10px; background:#ff5252; color:#fff; text-decoration:none }
+.qv-btn.ghost { background:transparent; border:1px solid #eee; color:#333 }

@@ -1,0 +1,458 @@
+/* pages.css */
+
+.page-container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #1e1e1e;
+  color: #f1f1f1;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.page-container h1 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #ffcc00; /* gold/yellow */
+}
+
+.page-container p {
+  line-height: 1.6;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.page-container ul {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.page-container a {
+  color: #ffcc00;
+  text-decoration: none;
+}
+
+.page-container a:hover {
+  text-decoration: underline;
+}
+.page-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.page-container h2 {
+  color: #f68b1e;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.page-container p {
+  text-align: center;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+
+.return-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.flex-row-form .form-flex-group {
+  display: flex;
+  gap: 15px;
+}
+
+.flex-row-form .form-flex-group > * {
+  flex: 1;
+}
+
+.form-message {
+  margin-bottom: 15px;
+  margin-top: 0;
+  text-align: center;
+  font-weight: bold;
+  color: green;
+}
+
+.return-form input,
+.return-form select,
+.return-form textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.return-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.return-form button {
+  padding: 14px;
+  background: #f68b1e;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.return-form button:hover {
+  background: #d97706;
+}
+
+.form-message {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
+  color: green;
+}
+/*  */
+/* AboutManwell.css - External Stylesheet for Manwell Store About Page */
+
+.about-container {
+  background-color: #fafafa;
+  color: #222;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+}
+
+/* HERO SECTION */
+.about-hero {
+  background: linear-gradient(90deg, #fff4f6, #fffaf0);
+  padding: 4rem 1.5rem;
+}
+
+.hero-content {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+  gap: 2rem;
+}
+
+.hero-text {
+  flex: 1 1 500px;
+}
+
+.hero-text h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.hero-text p {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.hero-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn-primary,
+.btn-secondary {
+  display: inline-block;
+  padding: 0.8rem 1.6rem;
+  border-radius: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.btn-primary {
+  background: #111;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  border: 1.5px solid #111;
+  color: #111;
+  background: #fff;
+}
+
+.btn-secondary:hover {
+  background: #f6f6f6;
+}
+
+.hero-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.hero-image {
+  flex: 1 1 400px;
+}
+
+.hero-image img {
+  width: 100%;
+  border-radius: 1.2rem;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hero-image p {
+  margin-top: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* MAIN CONTENT */
+.about-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* Mission Section */
+.mission-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  align-items: start;
+}
+
+.mission-text h2,
+.mission-text h3 {
+  font-weight: 700;
+  color: #111;
+}
+
+.mission-text p {
+  margin-top: 0.5rem;
+  color: #555;
+}
+
+.mission-cards {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.mission-cards ul {
+  margin-top: 1rem;
+  color: #555;
+  list-style: none;
+  padding-left: 0;
+}
+
+/* Values Section */
+.values-section h2 {
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 1rem;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.2rem;
+}
+
+.value-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.2rem;
+  text-align: left;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.value-card h5 {
+  font-weight: 600;
+  color: #111;
+}
+
+/* Team Section */
+.team-section {
+  text-align: center;
+}
+
+.team-section h2 {
+  font-weight: 700;
+  color: #111;
+}
+
+.team-section p {
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+.team-grid {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.team-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/* Visit Section */
+.visit-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  align-items: start;
+}
+
+.visit-info {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.06);
+}
+
+.visit-info h2 {
+  font-weight: 700;
+  color: #111;
+}
+
+.visit-info h4 {
+  font-weight: 600;
+  margin-top: 1rem;
+  color: #111;
+}
+
+.visit-info p {
+  color: #555;
+  margin-top: 0.2rem;
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 350px;
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.06);
+}
+
+/* Newsletter */
+.newsletter-section {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.06);
+}
+
+.newsletter-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.newsletter-content h3 {
+  font-weight: 700;
+  color: #111;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.newsletter-form input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.newsletter-form button {
+  padding: 0.8rem 1.6rem;
+  border-radius: 1rem;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.newsletter-form button:hover {
+  opacity: 0.9;
+}
+
+/* FOOTER */
+.about-footer {
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 2rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-text h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-content {
+    flex-direction: column;
+  }
+
+  .newsletter-content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .newsletter-form {
+    justify-content: center;
+  }
+}

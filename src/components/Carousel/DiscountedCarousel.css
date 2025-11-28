@@ -1,0 +1,20 @@
+.dc-root { width:100%; margin:0; padding:0; }
+.dc-carousel { position:relative; display:flex; align-items:center; justify-content:center; gap:20px; }
+.dc-nav-btn { position:absolute; top:50%; transform:translateY(-50%); background:#fff; border:1px solid #eee; padding:12px 16px; border-radius:50%; cursor:pointer; z-index:2; font-size:18px; font-weight:bold }
+.dc-nav-btn.prev { left:0 }
+.dc-nav-btn.next { right:0 }
+.dc-slide { position:relative; width:100%; max-width:800px; height:300px; border-radius:16px; overflow:hidden; display:block; background:#f5f5f5 }
+.dc-slide img { width:100%; height:100%; object-fit:cover }
+.dc-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.3); display:flex; flex-direction:column; justify-content:flex-end; padding:20px; color:#fff }
+.dc-badge { display:inline-block; width:fit-content; background:#e63946; padding:6px 12px; border-radius:8px; font-weight:800; margin-bottom:10px }
+.dc-meta h3 { margin:0 0 8px 0; font-size:22px }
+.dc-desc { margin:0 0 12px 0; opacity:0.9 }
+.dc-prices { display:flex; gap:8px; margin-bottom:14px }
+.dc-prices .new { font-weight:800; font-size:18px }
+.dc-prices .old { text-decoration:line-through; opacity:0.8 }
+.dc-cta { display:inline-block; background:#ff5252; color:#fff; padding:8px 16px; border-radius:8px; text-decoration:none }
+.dc-dots { display:flex; gap:8px; justify-content:center; margin-top:14px }
+.dc-dots .dot { width:12px; height:12px; border-radius:50%; background:#ddd; border:none; cursor:pointer }
+.dc-dots .dot.active { background:#ff5252 }
+
+@media (max-width:768px) { .dc-slide{height:220px} .dc-nav-btn{padding:8px 12px} }

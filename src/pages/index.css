@@ -1,0 +1,106 @@
+/* --- Page Container --- */
+.products-section {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  background: #f7f7f9;
+}
+
+.hero-carousel-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-bottom: 40px;
+}
+
+.hero-section-standalone {
+  width: 100%;
+  margin: 40px 0;
+}
+
+/* --- Hero Section --- */
+.section-title {
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #111;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.section-tagline {
+  font-size: 18px;
+  font-weight: 400;
+  color: #555;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* --- Product List Wrapper (keeps your product cards but styles spacing) --- */
+.products-section section {
+  background: #fff;
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Optional: If ProductList needs spacing fix --- */
+.products-section section > div {
+  margin-top: 20px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .hero-carousel-wrapper {
+    height: 350px;
+    margin-bottom: 35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-carousel-wrapper {
+    height: 300px;
+    margin-bottom: 30px;
+  }
+  
+  .hero-section-standalone {
+    margin: 30px 0;
+  }
+  
+  .section-title {
+    font-size: 30px;
+  }
+
+  .section-tagline {
+    font-size: 16px;
+    padding: 0 10px;
+  }
+
+  .products-section section {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-carousel-wrapper {
+    height: 240px;
+    margin-bottom: 20px;
+  }
+  
+  .hero-section-standalone {
+    margin: 20px 0;
+  }
+  
+  .section-title {
+    font-size: 24px;
+  }
+
+  .section-tagline {
+    font-size: 14px;
+    padding: 0 8px;
+  }
+
+  .products-section section {
+    padding: 15px;
+  }
+}

@@ -1,0 +1,9 @@
+.sticky-cart{position:fixed;right:18px;bottom:18px;z-index:9998;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.sc-surface{background:linear-gradient(180deg,#fff,#fffaf6);padding:10px 14px;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,0.12);display:flex;flex-direction:column;align-items:flex-end;cursor:pointer}
+.sc-head{display:flex;gap:8px;align-items:center}
+.sc-count{background:#ff5252;color:#fff;padding:6px 8px;border-radius:999px;font-weight:800}
+.sc-label{font-weight:700}
+.sc-total{font-weight:800;color:#222;margin-top:6px}
+.sc-cta{display:flex;gap:8px;flex-direction:column;margin-top:6px}
+.sc-cta a{background:#ff5252;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none}
+.sc-cta a.buy-now{background:#111}

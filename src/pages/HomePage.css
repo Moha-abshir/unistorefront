@@ -1,0 +1,529 @@
+/* ========= GLOBAL ========= */
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fffaf6;
+}
+
+/* ========= HOMEPAGE ========= */
+.home-container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 20px;
+}
+
+.sidebar {
+  width: 240px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 15px;
+  height: fit-content;
+  position: sticky;
+  top: 80px;
+}
+
+.category-list {
+  list-style: none;
+  padding: 0;
+}
+
+.category-list li {
+  padding: 10px 5px;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.category-list li:hover {
+  background-color: #f6f6f6;
+  color: #ff9900;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.hero-banner {
+  background: linear-gradient(90deg, #fff0e6 0%, #fff 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px;
+  margin-bottom: 30px;
+  background-image: url('https://github.com/Muzamilafey/myassets/blob/main/Mandera%20-%201.png?raw=true');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 250px;
+}
+
+.hero-text h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2c2c2c;
+  margin-bottom: 10px;
+}
+
+.hero-text p {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.shop-now-btn {
+  background-color: #ff9900;
+  color: white;
+  text-decoration: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.shop-now-btn:hover {
+  background-color: #e68200;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 15px;
+  border-left: 5px solid #ff9900;
+  padding-left: 10px;
+}
+
+.product-section {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 0px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* ========= LOGIN & REGISTER ========= */
+.home-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: rgb(77, 77, 194);
+  font-family: 'Times New Roman', Times, serif;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.home-slogan {
+  font-size: 1rem;
+  font-style: italic;
+  text-align: center;
+  color: black;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.auth-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.login-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
+.register-btn {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.register-btn:hover {
+  background-color: #1e7e34;
+}
+
+.login-page,
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 80%;
+  background: #f5f7fa;
+}
+
+.login-card,
+.register-card {
+  background: #cfcfcf;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  text-transform: uppercase;
+}
+
+.login-card input {
+  width: 90%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #007bff;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-card button:hover {
+  background: #0056b3;
+}
+
+.register-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+}
+
+.register-card button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #28a745;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.register-card button:hover {
+  background: #1e7e34;
+}
+
+/* ========= PROFILE PAGE ========= */
+.profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #eef2f7;
+  padding: 20px;
+}
+
+.profile-card {
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
+
+.profile-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.profile-alert {
+  text-align: center;
+  color: green;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+}
+
+.profile-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.profile-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #007bff;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.profile-btn:hover {
+  background: #0056b3;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #dc3545;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #b02a37;
+}
+
+.profile-message {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+/* ========= RESPONSIVE ========= */
+@media (max-width: 768px) {
+  .home-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .hero-banner {
+    padding: 25px;
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 28px;
+  }
+
+  .login-page, .register-page {
+    position: relative;
+    left: 5%;
+    right: 5%;
+    width: 90%;
+  }
+
+  .login-card, .register-card {
+    padding: 0 .5em;
+  }
+
+  .login-card input {
+    width: 80%;
+  }
+
+  .login-title, .register-title {
+    padding: 0;
+    margin: 0;
+  }
+}
+.home-container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-image 0.5s ease-in-out;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.hero-content {
+  text-align: center;
+  color: white;
+  max-width: 600px;
+  padding: 1rem;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.shop-now-btn {
+  background-color: #ff5252;
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.shop-now-btn:hover {
+  background-color: #ff3232;
+}
+
+/* Products Section */
+.products-section {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .hero-banner {
+    height: 60vh;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+  }
+
+  .shop-now-btn {
+    padding: 0.6rem 1.5rem;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.products-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #f7f7f7;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.section-title {
+  position: relative;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.section-tagline {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 2.5rem;
+  font-style: italic;
+}
+
+/* ProductList wrapper above overlay */
+.products-section > section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .section-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .products-section {
+    padding: 1.5rem 1rem;
+    background-position: top center;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  .products-section {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,115 @@
+/* Mobile-friendly styles for admin products page */
+.products-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 32px;
+  box-sizing: border-box;
+}
+.products-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 24px;
+}
+.products-table th, .products-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+.products-table th {
+  background: #f3f4f6;
+  font-weight: 600;
+}
+.products-table tr:last-child td {
+  border-bottom: none;
+}
+.products-actions {
+  display: flex;
+  gap: 8px;
+}
+/* General responsive tweaks */
+@media (max-width: 900px) {
+  /* Main content padding */
+  .admin-content {
+    padding: 16px 12px;
+  }
+
+  /* Products Header */
+  .products-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .order-summary-card {
+    width: 100%;
+    display: block;
+    justify-content: space-between;
+    text-align: left; /* optional */
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+
+  /* Buttons */
+  .admin-btn, .admin-btn-secondary {
+    width: 100%;
+    font-size: 0.95rem;
+    padding: 8px 0;
+  }
+
+  /* Product Form */
+  .admin-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .admin-input, .admin-textarea {
+    width: 100%;
+    padding: 8px;
+  }
+
+  /* Table responsiveness */
+  .products-table-section {
+    overflow-x: auto;
+  }
+
+  .orders-table {
+    min-width: 600px; /* ensure horizontal scroll if table is too wide */
+  }
+
+  .orders-table th,
+  .orders-table td {
+    font-size: 0.9rem;
+    padding: 8px 6px;
+  }
+
+  /* Adjust AdminNavbar for mobile if not already handled */
+  .admin-navbar-flex {
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+
+  /* Optional: make action buttons stack vertically in table on mobile */
+  .orders-table td > .admin-btn {
+    margin-bottom: 6px;
+    width: 100%;
+  }
+   .products-header > div:first-child {
+    display: flex;
+    flex-direction: column; /* stack cards vertically */
+    gap: 16px;
+  }
+  .order-summary-card-whole {
+  display: block; /* change from flex to block */
+  gap: 16px; /* optional spacing between cards */
+}
+  
+}
+.order-summary-card-whole {
+  display: flex; /* change from flex to block */
+  gap: 16px; /* optional spacing between cards */
+}
+
