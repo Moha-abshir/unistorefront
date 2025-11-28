@@ -112,6 +112,17 @@ export const initiatePesapalPayment = async (req, res) => {
         res.json(normalized);
     } catch (error) {
         console.error("❌ Pesapal Error:", error.response?.data || error.message);
+        // If order exists, delete it to avoid orphan unpaid orders
+        try {
+            const { orderId } = req.body || {};
+            if (orderId) {
+                await Order.findByIdAndDelete(orderId);
+                console.log(`Removed order ${orderId} after Pesapal initiation failure`);
+            }
+        } catch (delErr) {
+            console.error('Error deleting order after Pesapal initiation failure:', delErr.message);
+        }
+
         res.status(500).json({
             message: "Payment initiation failed",
             error: error.response?.data || error.message,
@@ -137,10 +148,8 @@ export const handlePesapalCallback = async (req, res) => {
 
         const { status_code } = statusResponse.data;
 
-        const newStatus = status_code === 1 ? 'Processing' : 'Failed';
-
-        // If payment succeeded, decrement product stock now (we deferred on order creation)
-        if (newStatus === 'Processing') {
+        // success
+        if (status_code === 1) {
             const order = await Order.findById(OrderMerchantReference);
             if (order && order.paymentMethod === 'Pesapal' && order.status !== 'Processing') {
                 // decrement each product's stock
@@ -151,11 +160,10 @@ export const handlePesapalCallback = async (req, res) => {
                             console.warn(`Product not found when finalizing order: ${item.product}`);
                             continue;
                         }
-                        // ensure stock is sufficient (it was validated at order creation)
                         if (item.qty > product.stock) {
                             console.error(`Insufficient stock for product ${product._id} while finalizing Pesapal order ${order._id}`);
-                            // mark order failed and stop processing
-                            await Order.findByIdAndUpdate(order._id, { status: 'Failed' });
+                            // delete order and redirect to failed
+                            await Order.findByIdAndDelete(order._id);
                             return res.redirect(`/payment-failed?orderId=${order._id}`);
                         }
                         product.stock -= item.qty;
@@ -164,12 +172,20 @@ export const handlePesapalCallback = async (req, res) => {
                         console.error('Error decrementing product stock after Pesapal success:', pErr.message);
                     }
                 }
+                // update status to Processing
+                await Order.findByIdAndUpdate(order._id, { status: 'Processing' });
             }
+            return res.redirect(`/order-confirmation?orderId=${OrderMerchantReference}`);
         }
 
-        await Order.findByIdAndUpdate(OrderMerchantReference, { status: newStatus });
-
-        res.redirect(`/order-confirmation?orderId=${OrderMerchantReference}`);
+        // failed or other non-success statuses: remove the pending order so it doesn't go through
+        try {
+            await Order.findByIdAndDelete(OrderMerchantReference);
+            console.log(`Deleted order ${OrderMerchantReference} after failed Pesapal payment`);
+        } catch (delErr) {
+            console.error('Error deleting order after failed Pesapal payment:', delErr.message);
+        }
+        return res.redirect(`/payment-failed?orderId=${OrderMerchantReference}`);
 
     } catch (error) {
         console.error("❌ Pesapal Callback Error:", error.response?.data || error.message);
