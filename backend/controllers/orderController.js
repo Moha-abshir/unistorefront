@@ -65,6 +65,7 @@ export const createOrder = async (req, res) => {
       discountValue: discount?.value || 0,
       couponCode: couponCode || null,
       finalAmount,
+      status: paymentMethod === 'Pesapal' || paymentMethod === 'Mpesa' ? 'Pending' : 'Processing',
     });
 
     await order.save();
