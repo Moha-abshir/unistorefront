@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import Order from '../models/Order.js';
+import Product from '../models/product.js';
 
 // Normalize PESAPAL base URL to support sandbox or production
 const rawBase = process.env.PESAPAL_BASE_URL || 'https://cybqa.pesapal.com/pesapalv3';
@@ -125,7 +126,7 @@ export const handlePesapalCallback = async (req, res) => {
     try {
         const token = await getPesapalToken();
         const statusResponse = await axios.get(
-            `${process.env.PESAPAL_BASE_URL}/api/Transactions/GetTransactionStatus?orderTrackingId=${OrderTrackingId}`,
+            `${PESAPAL_BASE}/api/Transactions/GetTransactionStatus?orderTrackingId=${OrderTrackingId}`,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -137,6 +138,34 @@ export const handlePesapalCallback = async (req, res) => {
         const { status_code } = statusResponse.data;
 
         const newStatus = status_code === 1 ? 'Processing' : 'Failed';
+
+        // If payment succeeded, decrement product stock now (we deferred on order creation)
+        if (newStatus === 'Processing') {
+            const order = await Order.findById(OrderMerchantReference);
+            if (order && order.paymentMethod === 'Pesapal' && order.status !== 'Processing') {
+                // decrement each product's stock
+                for (const item of order.orderItems) {
+                    try {
+                        const product = await Product.findById(item.product);
+                        if (!product) {
+                            console.warn(`Product not found when finalizing order: ${item.product}`);
+                            continue;
+                        }
+                        // ensure stock is sufficient (it was validated at order creation)
+                        if (item.qty > product.stock) {
+                            console.error(`Insufficient stock for product ${product._id} while finalizing Pesapal order ${order._id}`);
+                            // mark order failed and stop processing
+                            await Order.findByIdAndUpdate(order._id, { status: 'Failed' });
+                            return res.redirect(`/payment-failed?orderId=${order._id}`);
+                        }
+                        product.stock -= item.qty;
+                        await product.save();
+                    } catch (pErr) {
+                        console.error('Error decrementing product stock after Pesapal success:', pErr.message);
+                    }
+                }
+            }
+        }
 
         await Order.findByIdAndUpdate(OrderMerchantReference, { status: newStatus });
 

@@ -19,8 +19,10 @@ export const createOrder = async (req, res) => {
     if (!orderItems || orderItems.length === 0)
       return res.status(400).json({ message: 'No order items provided' });
 
-    // Process each order item: check stock & reduce
+    // Process each order item: check stock. For online payments like Pesapal/Mpesa
+    // do not decrement stock here — we'll reserve on successful payment in the callback.
     const processedItems = [];
+    const shouldReserveNow = !(paymentMethod === 'Pesapal' || paymentMethod === 'Mpesa');
     for (const item of orderItems) {
       const product = await Product.findById(item.product);
       if (!product)
@@ -31,8 +33,10 @@ export const createOrder = async (req, res) => {
           .status(400)
           .json({ message: `Not enough stock for ${product.name}` });
 
-      product.stock -= item.qty;
-      await product.save();
+      if (shouldReserveNow) {
+        product.stock -= item.qty;
+        await product.save();
+      }
 
       processedItems.push({
         product: product._id,
@@ -131,5 +135,33 @@ export const updateOrderStatus = async (req, res) => {
     res.json({ message: 'Order status updated', order });
   } catch (error) {
     res.status(500).json({ message: 'Error updating order', error: error.message });
+  }
+};
+
+// Delete an order (admin)
+export const deleteOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // If order not delivered or shipped, restore product stock
+    if (!['Delivered', 'Shipped'].includes(order.status)) {
+      for (const item of order.orderItems) {
+        try {
+          const product = await Product.findById(item.product);
+          if (!product) continue;
+          product.stock = (product.stock || 0) + (item.qty || 0);
+          await product.save();
+        } catch (pErr) {
+          console.error('Error restoring product stock on order delete:', pErr.message);
+        }
+      }
+    }
+
+    await Order.findByIdAndDelete(order._id);
+    res.json({ message: 'Order deleted' });
+  } catch (error) {
+    console.error('Delete order error:', error.message);
+    res.status(500).json({ message: 'Server error deleting order', error: error.message });
   }
 };
