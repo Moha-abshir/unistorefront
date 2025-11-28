@@ -36,12 +36,7 @@ app.use(
   cors({
     origin: [
        // deployed frontend
-      "https://www.buy.muzamilafey.digital", // production frontend domain
-      "https://buy.muzamilafey.digital",
-      "https://unistore-osi4.onrender.com",
-      "https://muzamilafey.digital",
-      "https://www.muzamilafey.digital",
-      "https://www.muzafey.online",
+      "https://muzafey.online",
       "https://www.muzafey.online",
        // local dev
     ],
