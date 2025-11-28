@@ -1,0 +1,9 @@
+html {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif; /* Retaining existing font */
+}

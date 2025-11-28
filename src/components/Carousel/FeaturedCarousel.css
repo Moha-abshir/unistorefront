@@ -1,0 +1,140 @@
+.fc-root { max-width:1200px; margin: 28px auto; padding: 12px; }
+
+.fc-head { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px; 
+}
+
+.fc-head h3 { 
+  margin: 0; 
+  font-size: 20px; 
+  font-weight: 700;
+}
+
+.fc-see-all { 
+  border: none; 
+  background: linear-gradient(135deg, #ff9500 0%, #ff7a00 100%); 
+  color: white; 
+  padding: 10px 16px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-weight: 600; 
+  font-size: 14px;
+  transition: all 0.2s; 
+  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.3);
+}
+
+.fc-see-all:hover { 
+  background: linear-gradient(135deg, #ff8800 0%, #ff6800 100%);
+  box-shadow: 0 6px 16px rgba(255, 149, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+/* 4-product grid layout */
+.fc-grid { 
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 16px; 
+  width: 100%;
+}
+
+.fc-item { 
+  background: #fff; 
+  border-radius: 12px; 
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06); 
+  text-decoration: none; 
+  color: inherit; 
+  overflow: hidden; 
+  transition: box-shadow 0.2s, transform 0.2s; 
+  cursor: pointer; 
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.fc-item:hover { 
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12); 
+  transform: translateY(-4px);
+}
+
+.fc-thumb-wrap { 
+  height: 200px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  background: #fafafa; 
+  overflow: hidden; 
+  flex-shrink: 0;
+}
+
+.fc-thumb-wrap img { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  user-select: none; 
+  pointer-events: none; 
+}
+
+.fc-meta { 
+  padding: 12px; 
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fc-name { 
+  font-weight: 700; 
+  font-size: 14px; 
+  margin-bottom: 8px; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+.fc-price { 
+  color: #ff5252; 
+  font-weight: 800;
+  font-size: 15px;
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 900px) { 
+  .fc-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 14px;
+  }
+  .fc-thumb-wrap { 
+    height: 180px; 
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 600px) { 
+  .fc-root {
+    padding: 8px;
+    margin: 20px auto;
+  }
+  .fc-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .fc-head h3 {
+    font-size: 18px;
+  }
+  .fc-see-all {
+    width: 100%;
+    text-align: center;
+  }
+  .fc-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 14px;
+  }
+  .fc-thumb-wrap { 
+    height: 160px; 
+  }
+}
+

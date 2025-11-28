@@ -1,0 +1,11 @@
+.collections-page { max-width:1200px; margin:0 auto; padding:40px 20px }
+.collections-page h2 { font-size:32px; font-weight:800; margin-bottom:10px }
+.collections-subtitle { color:#666; margin-bottom:30px; font-size:16px }
+.collections-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:18px }
+.collection-card { position:relative; height:280px; border-radius:14px; overflow:hidden; text-decoration:none; color:#333 }
+.collection-thumb { width:100%; height:100%; background:linear-gradient(135deg, #ffd6d6, #ffe0cc); display:flex; align-items:center; justify-content:center }
+.collection-label { font-size:18px; font-weight:800 }
+.collection-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s }
+.collection-card:hover .collection-overlay { opacity:1; color:#fff }
+
+@media (max-width:768px) { .collections-grid { grid-template-columns:1fr 1fr } .collection-card{height:200px} }

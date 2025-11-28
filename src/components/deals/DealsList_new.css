@@ -1,0 +1,342 @@
+/* Jumia-Style Deals Block Layout */
+
+.deals-list-section {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px 32px 16px;
+}
+
+/* Individual Deal Block */
+.deal-block {
+  margin-bottom: 28px;
+}
+
+.deal-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #ff9800 0%, #fb8c00 100%);
+  border-radius: 8px;
+}
+
+.deal-block-title-info {
+  flex: 1;
+}
+
+.deal-block-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 2px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.deal-block-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.see-all-link {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.see-all-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Horizontal Scroll Container */
+.deal-block-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px 0;
+}
+
+.deal-block-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.deal-block-scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.deal-block-scroll-container::-webkit-scrollbar-thumb {
+  background: #ff9800;
+  border-radius: 10px;
+}
+
+.deal-block-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #f57c00;
+}
+
+/* Products Grid (Horizontal) */
+.deal-block-products {
+  display: flex;
+  gap: 12px;
+  padding: 0 16px;
+  min-width: min-content;
+}
+
+/* Jumia Product Card */
+.jumia-product-card {
+  flex: 0 0 180px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.jumia-product-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border-color: #ff9800;
+}
+
+.jumia-product-image-container {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  background: #f5f5f5;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.jumia-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.jumia-product-card:hover .jumia-product-image {
+  transform: scale(1.08);
+}
+
+.jumia-discount-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, #ff5252 0%, #ff1744 100%);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 2;
+}
+
+/* Product Info */
+.jumia-product-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.jumia-product-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+  min-height: 26px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.jumia-product-price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.jumia-current-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff9800;
+}
+
+.jumia-original-price {
+  font-size: 11px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.jumia-add-btn {
+  background: linear-gradient(135deg, #ff9800 0%, #fb8c00 100%);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-touch-callout: none;
+}
+
+.jumia-add-btn:hover {
+  background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);
+  transform: translateY(-1px);
+}
+
+.jumia-add-btn:active {
+  transform: translateY(0);
+}
+
+/* Mobile Optimizations */
+@supports (overflow-scrolling: touch) {
+  .deal-block-scroll-container {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .deal-block-header {
+    padding: 10px 12px;
+  }
+
+  .deal-block-title {
+    font-size: 15px;
+  }
+
+  .deal-block-subtitle {
+    font-size: 11px;
+  }
+
+  .jumia-product-card {
+    flex: 0 0 160px;
+  }
+
+  .jumia-product-image-container {
+    height: 160px;
+  }
+
+  .see-all-link {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .deals-list-section {
+    padding: 0 12px 24px 12px;
+  }
+
+  .deal-block {
+    margin-bottom: 20px;
+  }
+
+  .deal-block-header {
+    padding: 8px 12px;
+    margin-bottom: 12px;
+  }
+
+  .deal-block-title {
+    font-size: 14px;
+  }
+
+  .deal-block-subtitle {
+    font-size: 10px;
+  }
+
+  .see-all-link {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+
+  .deal-block-scroll-container {
+    padding: 12px 0;
+  }
+
+  .deal-block-products {
+    gap: 10px;
+    padding: 0 12px;
+  }
+
+  .jumia-product-card {
+    flex: 0 0 140px;
+  }
+
+  .jumia-product-image-container {
+    height: 140px;
+  }
+
+  .jumia-product-info {
+    padding: 10px;
+  }
+
+  .jumia-product-name {
+    font-size: 12px;
+    min-height: 24px;
+  }
+
+  .jumia-current-price {
+    font-size: 13px;
+  }
+
+  .jumia-add-btn {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .deal-block-products {
+    gap: 8px;
+  }
+
+  .jumia-product-card {
+    flex: 0 0 130px;
+  }
+
+  .jumia-product-image-container {
+    height: 130px;
+  }
+
+  .jumia-discount-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .jumia-product-name {
+    font-size: 11px;
+  }
+
+  .jumia-current-price {
+    font-size: 12px;
+  }
+
+  .jumia-original-price {
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,786 @@
+/* Jumia-Style Deals Block Layout */
+
+.deals-list-section {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px 32px 16px;
+}
+
+/* Individual Deal Block */
+.deal-block {
+  margin-bottom: 28px;
+}
+
+.deal-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #ff9800 0%, #fb8c00 100%);
+  border-radius: 8px;
+}
+
+.deal-block-title-info {
+  flex: 1;
+}
+
+.deal-block-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 2px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.deal-block-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.see-all-link {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.see-all-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Horizontal Scroll Container */
+.deal-block-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px 0;
+}
+
+.deal-block-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.deal-block-scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.deal-block-scroll-container::-webkit-scrollbar-thumb {
+  background: #ff9800;
+  border-radius: 10px;
+}
+
+.deal-block-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #f57c00;
+}
+
+/* Products Grid (Horizontal) */
+.deal-block-products {
+  display: flex;
+  gap: 12px;
+  padding: 0 16px;
+  min-width: min-content;
+}
+
+/* Jumia Product Card */
+.jumia-product-card {
+  flex: 0 0 180px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.jumia-product-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border-color: #ff9800;
+}
+
+.jumia-product-image-container {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  background: #f5f5f5;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.jumia-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.jumia-product-card:hover .jumia-product-image {
+  transform: scale(1.08);
+}
+
+.jumia-discount-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: linear-gradient(135deg, #ff5252 0%, #ff1744 100%);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  z-index: 2;
+}
+
+/* Product Info */
+.jumia-product-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.jumia-product-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+  min-height: 26px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.jumia-product-price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.jumia-current-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff9800;
+}
+
+.jumia-original-price {
+  font-size: 11px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.jumia-add-btn {
+  background: linear-gradient(135deg, #ff9800 0%, #fb8c00 100%);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-touch-callout: none;
+}
+
+.jumia-add-btn:hover {
+  background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);
+  transform: translateY(-1px);
+}
+
+.jumia-add-btn:active {
+  transform: translateY(0);
+}
+
+/* Mobile Optimizations */
+@supports (overflow-scrolling: touch) {
+  .deal-block-scroll-container {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .deal-block-header {
+    padding: 10px 12px;
+  }
+
+  .deal-block-title {
+    font-size: 15px;
+  }
+
+  .deal-block-subtitle {
+    font-size: 11px;
+  }
+
+  .jumia-product-card {
+    flex: 0 0 160px;
+  }
+
+  .jumia-product-image-container {
+    height: 160px;
+  }
+
+  .see-all-link {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .deals-list-section {
+    padding: 0 12px 24px 12px;
+  }
+
+  .deal-block {
+    margin-bottom: 20px;
+  }
+
+  .deal-block-header {
+    padding: 8px 12px;
+    margin-bottom: 12px;
+  }
+
+  .deal-block-title {
+    font-size: 14px;
+  }
+
+  .deal-block-subtitle {
+    font-size: 10px;
+  }
+
+  .see-all-link {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+
+  .deal-block-scroll-container {
+    padding: 12px 0;
+  }
+
+  .deal-block-products {
+    gap: 10px;
+    padding: 0 12px;
+  }
+
+  .jumia-product-card {
+    flex: 0 0 140px;
+  }
+
+  .jumia-product-image-container {
+    height: 140px;
+  }
+
+  .jumia-product-info {
+    padding: 10px;
+  }
+
+  .jumia-product-name {
+    font-size: 12px;
+    min-height: 24px;
+  }
+
+  .jumia-current-price {
+    font-size: 13px;
+  }
+
+  .jumia-add-btn {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .deal-block-products {
+    gap: 8px;
+  }
+
+  .jumia-product-card {
+    flex: 0 0 130px;
+  }
+
+  .jumia-product-image-container {
+    height: 130px;
+  }
+
+  .jumia-discount-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  .jumia-product-name {
+    font-size: 11px;
+  }
+
+  .jumia-current-price {
+    font-size: 12px;
+  }
+
+  .jumia-original-price {
+    font-size: 10px;
+  }
+}
+
+
+.deals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.deals-title-info {
+  flex: 1;
+}
+
+.deals-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 4px 0;
+}
+
+.deals-counter {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.deals-nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.deals-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #222;
+}
+
+.deals-nav-btn:hover {
+  background: #ff5252;
+  color: #fff;
+  border-color: #ff5252;
+}
+
+.products-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+  /* Fade wrapper to switch deals without sliding */
+  .deals-products-fade-wrapper {
+    width: 100%;
+    display: block;
+    transition: opacity 260ms ease;
+  }
+  .deals-products-fade-wrapper.fade-out { opacity: 0; }
+  .deals-products-fade-wrapper.fade-in { opacity: 1; }
+
+/* Mobile optimizations */
+@supports (overflow-scrolling: touch) {
+  .products-scroll-container {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.products-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.products-scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.products-scroll-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.products-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.deals-products-grid {
+  display: flex;
+  gap: 16px;
+  min-width: min-content;
+  padding: 0;
+  width: 100%;
+}
+
+.deal-product-card {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  scroll-snap-align: start;
+  scroll-snap-stop: auto;
+}
+
+.deal-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.deal-product-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background: #f5f5f5;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.deal-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+  display: block;
+}
+
+.deal-product-card:hover .deal-product-image {
+  transform: scale(1.05);
+}
+
+.deal-discount-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #ff5252;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 2;
+}
+
+.deal-product-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.deal-product-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+  min-height: 26px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.deal-product-prices {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.deal-current-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ff5252;
+}
+
+.deal-original-price {
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.deal-product-btn {
+  background: #ff5252;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-touch-callout: none;
+}
+
+.deal-product-btn:hover {
+  background: #ff3838;
+}
+
+.deal-product-btn:active {
+  transform: scale(0.98);
+}
+
+.deals-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.indicator-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+}
+
+.indicator-dot.active {
+  background: #ff5252;
+  border-color: #ff5252;
+}
+
+.indicator-dot:hover {
+  border-color: #ff5252;
+}
+
+.no-deal-products {
+  text-align: center;
+  color: #999;
+  padding: 40px 20px;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .deals-list-section {
+    margin-bottom: 32px;
+    padding: 0 12px;
+  }
+
+  .deals-header {
+    margin-bottom: 16px;
+  }
+
+  .deals-title {
+    font-size: 16px;
+  }
+
+  .deals-nav-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .deal-product-card {
+    flex: 0 0 170px;
+  }
+
+  .deal-product-image-container {
+    height: 170px;
+  }
+
+  .deal-product-name {
+    font-size: 12px;
+  }
+
+  .deal-current-price {
+    font-size: 13px;
+  }
+
+  .deals-products-grid {
+    gap: 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .deals-list-section {
+    margin-bottom: 24px;
+    padding: 0 8px;
+  }
+
+  .deals-header {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+
+  .deals-title {
+    font-size: 15px;
+  }
+
+  .deals-counter {
+    font-size: 11px;
+  }
+
+  .deals-nav-buttons {
+    gap: 6px;
+  }
+
+  .deals-nav-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .deal-product-card {
+    flex: 0 0 140px;
+  }
+
+  .deal-product-image-container {
+    height: 140px;
+  }
+
+  .deal-product-info {
+    padding: 10px;
+  }
+
+  .deal-product-name {
+    font-size: 11px;
+    margin-bottom: 6px;
+    min-height: 22px;
+  }
+
+  .deal-product-prices {
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .deal-current-price {
+    font-size: 12px;
+  }
+
+  .deal-original-price {
+    font-size: 11px;
+  }
+
+  .deal-product-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .deals-products-grid {
+    gap: 10px;
+  }
+
+  .deals-indicators {
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .indicator-dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.deals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .deals-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .deals-list-section {
+    margin-bottom: 32px;
+  }
+
+  .deal-product-card {
+    flex: 0 0 160px;
+  }
+
+  .deal-product-image-container {
+    height: 160px;
+  }
+
+  .deal-product-name {
+    font-size: 12px;
+  }
+
+  .deal-current-price {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 600px) {
+  .deals-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+  .deal-product-card {
+    flex: 0 0 140px;
+  }
+
+  .deal-product-image-container {
+    height: 140px;
+  }
+}
+
+.deal-products-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.deal-products-content {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+}

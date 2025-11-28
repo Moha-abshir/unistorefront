@@ -1,0 +1,299 @@
+.dashboard-root {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #0a183d 0%, #1a2a4f 100%);
+  color: #fff;
+  padding: 0;
+}
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 0 0 0;
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+}
+.dashboard-sidebar {
+  width: 220px;
+  background: #162447;
+  border-radius: 18px;
+  padding: 32px 0 24px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 24px rgba(33,150,243,0.08);
+}
+.dashboard-sidebar-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #fff;
+}
+.dashboard-sidebar-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 12px 0 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+    transition: background 0.2s, transform 0.2s;
+}
+.dashboard-sidebar-link:hover {
+  background: #1f4068;
+    transform: scale(1.04);
+}
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.dashboard-welcome {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: #fff;
+}
+.dashboard-cards {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.dashboard-card {
+  background: #1f4068;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px rgba(33,150,243,0.08);
+  padding: 32px 28px;
+  min-width: 260px;
+  max-width: 340px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: cardFadeIn 0.7s cubic-bezier(.4,0,.2,1) forwards;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  @keyframes cardFadeIn {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .dashboard-card:hover {
+    box-shadow: 0 12px 32px rgba(33,150,243,0.18);
+    transform: translateY(-4px) scale(1.02);
+}
+.dashboard-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #fff;
+}
+.dashboard-card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00e0ff;
+  margin-bottom: 8px;
+}
+.dashboard-card-desc {
+  font-size: 1rem;
+  color: #b0b8c1;
+}
+.dashboard-products {
+  margin-top: 24px;
+}
+.dashboard-products-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #fff;
+}
+.dashboard-products-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.dashboard-products-list li {
+  background: #162447;
+  border-radius: 8px;
+  padding: 10px 18px;
+  margin-bottom: 8px;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .dashboard-products-list li:hover {
+    background: #1f4068;
+    transform: scale(1.02);
+/* Table styles for admin pages */
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(33,150,243,0.10);
+  background: #162447;
+  margin-top: 18px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #162447;
+  color: #fff;
+}
+.table th, .table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #23395d;
+  font-size: 1rem;
+}
+.table th {
+  background: #1f4068;
+  font-weight: 600;
+  color: #00e0ff;
+}
+.table tr {
+  transition: background 0.2s, transform 0.2s;
+}
+.table tr:hover {
+  background: #23395d;
+  transform: scale(1.01);
+}
+.noData {
+  color: #b0b8c1;
+  text-align: center;
+  margin: 32px 0;
+  font-size: 1.1rem;
+}
+.loading {
+  color: #00e0ff;
+  text-align: center;
+  margin: 32px 0;
+  font-size: 1.1rem;
+}
+.error {
+  color: #ff4c4c;
+  text-align: center;
+  margin: 32px 0;
+  font-size: 1.1rem;
+}
+/* Button styles for admin pages */
+.btnPrimary {
+  background: linear-gradient(90deg, #00e0ff 0%, #1f4068 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 8px;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.10);
+  transition: background 0.2s, transform 0.2s;
+}
+.btnPrimary:hover {
+  background: linear-gradient(90deg, #00e0ff 0%, #23395d 100%);
+  transform: scale(1.05);
+}
+.btnDanger {
+  background: linear-gradient(90deg, #ff4c4c 0%, #1f4068 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 8px;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.10);
+  transition: background 0.2s, transform 0.2s;
+}
+.btnDanger:hover {
+  background: linear-gradient(90deg, #ff4c4c 0%, #23395d 100%);
+  transform: scale(1.05);
+}
+.btnDelete {
+  background: linear-gradient(90deg, #b00020 0%, #1f4068 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.10);
+  transition: background 0.2s, transform 0.2s;
+}
+.btnDelete:hover {
+  background: linear-gradient(90deg, #b00020 0%, #23395d 100%);
+  transform: scale(1.05);
+}
+/* Status badge styles */
+.statusBadge {
+  padding: 6px 16px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  background: #23395d;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.10);
+}
+.statusPending {
+  background: #f0ad4e;
+  color: #fff;
+}
+.statusProcessing {
+  background: #5bc0de;
+  color: #fff;
+}
+.statusShipped {
+  background: #0275d8;
+  color: #fff;
+}
+.statusDelivered {
+  background: #5cb85c;
+  color: #fff;
+}
+.statusCancelled {
+  background: #d9534f;
+  color: #fff;
+}
+.statusActive {
+  background: #5cb85c;
+  color: #fff;
+}
+.statusInactive {
+  background: #d9534f;
+  color: #fff;
+}
+/* Form styles for admin pages */
+.formCard {
+  background: #162447;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(33,150,243,0.10);
+  padding: 28px 24px;
+  margin-bottom: 24px;
+  animation: cardFadeIn 0.7s cubic-bezier(.4,0,.2,1) forwards;
+}
+.input, .textarea, .select {
+  background: #23395d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.input:focus, .textarea:focus, .select:focus {
+  background: #1f4068;
+  box-shadow: 0 0 0 2px #00e0ff;
+}
+.formActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+}

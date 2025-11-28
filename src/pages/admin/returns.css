@@ -1,0 +1,157 @@
+.admin-returns-page {
+  padding: 2rem;
+  background: #f8f9fa;
+  min-height: 80vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #222;
+  text-align: center;
+}
+
+.loading,
+.no-returns {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #666;
+  margin-top: 2rem;
+}
+
+.table-container {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.returns-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.returns-table thead {
+  background: #343a40;
+  color: #fff;
+}
+
+.returns-table th,
+.returns-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.returns-table tbody tr:hover {
+  background: #f1f3f5;
+}
+
+.returns-table th {
+  font-weight: 600;
+}
+
+
+.returns-table td {
+  color: #444;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.95em;
+  font-weight: 500;
+  background: #e9ecef;
+  color: #333;
+  margin-right: 4px;
+  text-transform: capitalize;
+}
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+.status-approved {
+  background: #d4edda;
+  color: #155724;
+}
+.status-rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.approve-btn, .reject-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95em;
+  font-weight: 500;
+  margin-right: 6px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.approve-btn {
+  background: #28a745;
+  color: #fff;
+}
+.approve-btn:hover {
+  background: #218838;
+}
+.reject-btn {
+  background: #dc3545;
+  color: #fff;
+}
+.reject-btn:hover {
+  background: #c82333;
+}
+
+/* ===== Mobile Responsive for Returns Page ===== */
+@media (max-width: 900px) {
+  .admin-content {
+    padding: 16px 12px;
+  }
+
+  /* Header stack */
+  .returns-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Table wrapper for horizontal scroll */
+  .admin-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .admin-table {
+    min-width: 700px; /* allow horizontal scroll */
+    font-size: 0.9rem;
+  }
+
+  .admin-table th, .admin-table td {
+    padding: 8px 6px;
+  }
+
+  /* Action buttons stack */
+  .admin-table td > div {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .admin-table td > div button {
+    width: 100%;
+    padding: 6px 0;
+    font-size: 0.85rem;
+  }
+
+  /* Status badges smaller on mobile */
+  .admin-status {
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
+}
+
