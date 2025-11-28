@@ -1,0 +1,9 @@
+.wishlist-page { padding: 40px 20px; max-width: 1100px; margin: 0 auto; }
+.wishlist-page .page-inner { background:#fff; padding:20px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.05) }
+.wishlist-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:14px }
+.wl-item { background:#fafafa; border-radius:10px; overflow:hidden; display:flex; gap:8px; padding:8px; align-items:center }
+.wl-item img { width:80px; height:80px; object-fit:cover; border-radius:8px }
+.wl-meta { flex:1 }
+.wl-name { display:block; font-weight:700; color:#222 }
+.wl-price { color:#ff5252; font-weight:800 }
+.wl-remove { background:#ff5252; color:#fff; border:none; padding:6px 10px; border-radius:8px; cursor:pointer }

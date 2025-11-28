@@ -1,0 +1,134 @@
+.hero-root {
+  position: relative;
+  width: 100%;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #1f4068 0%, #00bcd4 100%);
+  display: flex;
+  align-items: center;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-left {
+  flex: 0 1 100%;
+  text-align: center;
+}
+
+.hero-head {
+  font-size: 48px;
+  margin: 0 0 16px 0;
+  color: #fff;
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 24px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 28px;
+  background: #ff5252;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 82, 82, 0.3);
+}
+
+.hero-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 82, 82, 0.4);
+  background: #ff3838;
+}
+
+.hero-cta.ghost {
+  background: rgba(255, 255, 255, 0.95);
+  color: #ff5252;
+  border: none;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+.hero-cta.ghost:hover {
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .hero-root {
+    padding: 40px 16px;
+  }
+  
+  .hero-inner {
+    flex-direction: column;
+  }
+  
+  .hero-left {
+    text-align: center;
+  }
+  
+  .hero-head {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+  
+  .hero-sub {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .hero-ctas {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-root {
+    padding: 30px 12px;
+  }
+  
+  .hero-head {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  .hero-sub {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .hero-cta {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+  
+  .hero-ctas {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .hero-cta {
+    width: 100%;
+  }
+}

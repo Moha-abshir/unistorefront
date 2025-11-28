@@ -1,0 +1,369 @@
+.product-list-container {
+  padding: 10px;
+  max-width: 100%;
+  margin: auto;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 250px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  box-shadow: 0px 0px 6px rgba(0, 123, 255, 0.3);
+}
+
+.category-select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+.category-select:hover {
+  border-color: #007bff;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+/* --- Skeleton Loading --- */
+.skeleton-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 12px;
+}
+.skeleton-image {
+  height: 180px;
+  background: linear-gradient(90deg, #f0f0f0 0%, #e8e8e8 50%, #f0f0f0 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+.skeleton-body {
+  padding: 10px 12px;
+}
+.skeleton-line {
+  height: 12px;
+  background: linear-gradient(90deg, #f0f0f0 0%, #e8e8e8 50%, #f0f0f0 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.skeleton-line.short { width: 60%; height: 14px; }
+.skeleton-line.tiny { width: 30%; height: 10px; }
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.no-products {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #888;
+  grid-column: 1 / -1;
+}
+
+
+/* card */
+.product-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 240px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 12px;
+  text-align: center;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.product-name {
+  font-size: 1rem;
+  margin: 8px 0;
+  color: #333;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.product-price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 10px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.view-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  color: #fff;
+  background: #007bff;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.view-btn:hover {
+  background: #0056b3;
+}
+/* new actions */
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+.qty-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.qty-controls button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.qty-controls input {
+  width: 44px;
+  text-align: center;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 6px;
+}
+.add-btn {
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.add-btn:hover { background: #fb8c00 }
+
+/* small success toast inside card */
+.card-toast {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+/* hide add button on small screens */
+@media (max-width: 600px) {
+  .add-btn { display: none; }
+}
+@media (max-width: 768px) {
+  .product-list-container {
+    padding: 8px;
+    max-width: 100%;
+  }
+  .filter-bar {
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-input, .category-select {
+    min-width: 0;
+    font-size: 0.98rem;
+    padding: 10px;
+  }
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .product-card {
+    width: 100%;
+    min-width: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin: 0;
+  }
+  .product-image {
+    height: 140px;
+    border-radius: 0;
+  }
+  .product-info {
+    padding: 10px;
+  }
+  .product-name {
+    font-size: 0.95rem;
+    margin: 6px 0;
+  }
+  .product-price {
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+  .view-btn {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    width: 100%;
+    border-radius: 4px;
+  }
+}
+/* --- FILTER BAR --- */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin: 20px auto;
+  max-width: 900px;
+  flex-wrap: wrap;
+}
+
+/* --- SEARCH INPUT --- */
+.search-input {
+  flex: 1;
+  min-width: 250px;
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: #f9f9f9;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #1877f2;
+  background-color: #fff;
+  box-shadow: 0 0 4px rgba(24, 119, 242, 0.3);
+}
+
+/* --- CATEGORY SELECT --- */
+.category-select {
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-width: 180px;
+}
+
+.category-select:hover,
+.category-select:focus {
+  border-color: #1877f2;
+  background-color: #fff;
+  box-shadow: 0 0 4px rgba(24, 119, 242, 0.3);
+  outline: none;
+}
+
+/* --- ADD A NICE PLACEHOLDER GLOW --- */
+.search-input::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* --- MOBILE RESPONSIVE DESIGN --- */
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .search-input,
+  .category-select {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+}
+
+/* --- EXTRA SMALL DEVICES --- */
+@media (max-width: 480px) {
+  .filter-bar {
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  .search-input,
+  .category-select {
+    padding: 10px 12px;
+  }
+}
+
+/* --- SEE ALL PRODUCTS --- */
+.see-all-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.see-all-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: #ff5252;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 28px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.see-all-btn:hover {
+  background: #e63636;
+  transform: translateY(-2px);
+}

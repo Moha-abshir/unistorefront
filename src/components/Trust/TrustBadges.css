@@ -1,0 +1,5 @@
+.trust-root{width:100%;padding:20px 0;background:transparent}
+.trust-inner{max-width:1200px;margin:0 auto;display:flex;gap:40px;justify-content:center;align-items:center;padding:0 20px}
+.trust-item{display:flex;flex-direction:column;align-items:center;gap:10px;color:#333;font-weight:500;font-size:15px}
+.trust-icon{font-size:40px;line-height:1}
+@media (max-width:600px){ .trust-inner{gap:20px;padding:0 10px} .trust-icon{font-size:32px} }

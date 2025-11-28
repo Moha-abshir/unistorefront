@@ -1,0 +1,98 @@
+.checkout-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  background: #f3f4f6;
+  padding: 20px;
+}
+
+.payment-step {
+  width: 100%;
+  max-width: 600px;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.back-btn {
+  background: transparent;
+  color: #4f46e5;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .checkout-container {
+    padding: 15px;
+  }
+
+  .payment-step {
+    padding: 20px;
+  }
+}
+/* Coupon section styling */
+.coupon-section {
+  background: #f8f9fa;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.coupon-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.coupon-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.coupon-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.apply-btn {
+  background: #2a9d8f;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+.apply-btn:hover {
+  background: #21867a;
+}
+
+.coupon-success {
+  color: #2a9d8f;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.coupon-error {
+  color: #e63946;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
