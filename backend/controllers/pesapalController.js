@@ -104,6 +104,22 @@ export const initiatePesapalPayment = async (req, res) => {
         console.log('✅ Pesapal Order Response:', orderResponse.data);
         // normalize response to include redirect_url and order_tracking_id for frontend
         const resp = orderResponse.data;
+
+        // If Pesapal returned an error object inside a 200 response, treat as failure
+        if (resp && (resp.error || (resp.status && String(resp.status).startsWith('5')))) {
+            console.error('Pesapal returned error in SubmitOrderRequest:', resp.error || resp);
+            // delete order if it exists
+            try {
+                if (orderId) {
+                    await Order.findByIdAndDelete(orderId);
+                    console.log(`Removed order ${orderId} after Pesapal returned error`);
+                }
+            } catch (delErr) {
+                console.error('Error deleting order after Pesapal returned error:', delErr.message);
+            }
+            return res.status(400).json({ message: 'Pesapal initiation failed', error: resp.error || resp });
+        }
+
         const normalized = {
             redirect_url: resp.redirect_url || resp.redirectUrl || resp.data?.redirect_url,
             order_tracking_id: resp.order_tracking_id || resp.orderTrackingId || resp.data?.order_tracking_id,
@@ -199,7 +215,7 @@ export const getTransactionStatus = async (req, res) => {
         const token = await getPesapalToken();
 
         const statusResponse = await axios.get(
-            `${process.env.PESAPAL_BASE_URL}/api/Transactions/GetTransactionStatus?orderTrackingId=${orderTrackingId}`,
+            `${PESAPAL_BASE}/api/Transactions/GetTransactionStatus?orderTrackingId=${orderTrackingId}`,
             {
                 headers: {
                     'Content-Type': 'application/json',
