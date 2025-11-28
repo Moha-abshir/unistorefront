@@ -364,6 +364,7 @@ body, html {
   margin-right: 8px;
   cursor: pointer;
   transition: box-shadow 0.2s, transform 0.2s;
+  display: inline-block;
 }
 .admin-btn:hover, .admin-link:hover {
   box-shadow: 0 2px 8px rgba(0,123,255,0.15);
