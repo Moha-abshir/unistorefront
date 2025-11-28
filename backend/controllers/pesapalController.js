@@ -2,31 +2,50 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import Order from '../models/Order.js';
 
-// Log Pesapal environment variables
-console.log("PESAPAL_BASE_URL:", process.env.PESAPAL_BASE_URL);
-console.log("PESAPAL_CONSUMER_KEY:", process.env.PESAPAL_CONSUMER_KEY);
-console.log("PESAPAL_CONSUMER_SECRET:", process.env.PESAPAL_CONSUMER_SECRET);
-console.log("PESAPAL_CALLBACK_URL:", process.env.PESAPAL_CALLBACK_URL);
+// Normalize PESAPAL base URL to support sandbox or production
+const rawBase = process.env.PESAPAL_BASE_URL || 'https://cybqa.pesapal.com/pesapalv3';
+let PESAPAL_BASE = rawBase.replace(/\/+$/g, '');
+if (PESAPAL_BASE.includes('cybqa') && !PESAPAL_BASE.includes('/pesapalv3')) {
+    PESAPAL_BASE = PESAPAL_BASE + '/pesapalv3';
+}
+if (PESAPAL_BASE.includes('pay.pesapal.com') && !PESAPAL_BASE.includes('/v3')) {
+    PESAPAL_BASE = PESAPAL_BASE + '/v3';
+}
+
+// Log Pesapal environment variables (sanitized)
+console.log('PESAPAL_BASE:', PESAPAL_BASE);
+console.log('PESAPAL_CALLBACK_URL:', process.env.PESAPAL_CALLBACK_URL);
 
 const getPesapalToken = async () => {
+    const consumerKey = process.env.PESAPAL_CONSUMER_KEY;
+    const consumerSecret = process.env.PESAPAL_CONSUMER_SECRET;
+
+    if (!consumerKey || !consumerSecret) {
+        const msg = 'Missing PESAPAL_CONSUMER_KEY or PESAPAL_CONSUMER_SECRET in environment';
+        console.error('❌', msg);
+        throw new Error(msg);
+    }
+
     try {
         const tokenResponse = await axios.post(
-            `${process.env.PESAPAL_BASE_URL}/api/Auth/RequestToken`,
+            `${PESAPAL_BASE}/api/Auth/RequestToken`,
             {
-                consumer_key: process.env.PESAPAL_CONSUMER_KEY,
-                consumer_secret: process.env.PESAPAL_CONSUMER_SECRET,
+                consumer_key: consumerKey,
+                consumer_secret: consumerSecret,
             },
             {
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    Accept: 'application/json',
                 },
             }
         );
-        return tokenResponse.data.token;
+
+        // token may be nested depending on API response
+        return tokenResponse.data?.token || tokenResponse.data?.data || tokenResponse.data;
     } catch (error) {
-        console.error("❌ Pesapal Get Token Error:", error.response?.data || error.message);
-        throw new Error("Failed to get Pesapal token");
+        console.error('❌ Pesapal Get Token Error:', error.response?.data || error.message);
+        throw new Error('Failed to get Pesapal token');
     }
 };
 
@@ -34,30 +53,35 @@ export const initiatePesapalPayment = async (req, res) => {
     try {
         const { amount, email, phone, orderId } = req.body;
         const token = await getPesapalToken();
-        console.log("✅ Pesapal Token:", token);
+        console.log('✅ Pesapal Token:', token);
 
-        const ipnRegistrationResponse = await axios.post(
-            `${process.env.PESAPAL_BASE_URL}/api/URLSetup/RegisterIPN`,
-            {
-                url: process.env.PESAPAL_CALLBACK_URL,
-                ipn_notification_type: "GET"
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+        // Register IPN (notification) if callback provided
+        let ipn_id = process.env.PESAPAL_IPN_ID;
+        try {
+            const ipnRegistrationResponse = await axios.post(
+                `${PESAPAL_BASE}/api/URLSetup/RegisterIPN`,
+                {
+                    url: process.env.PESAPAL_CALLBACK_URL,
+                    ipn_notification_type: 'GET',
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
                 }
-            }
-        );
-
-        const ipn_id = ipnRegistrationResponse.data.ipn_id;
+            );
+            ipn_id = ipnRegistrationResponse.data?.ipn_id || ipnRegistrationResponse.data?.notification_id || ipn_id;
+        } catch (ipnErr) {
+            console.warn('⚠️ IPN registration failed (continuing):', ipnErr.response?.data || ipnErr.message);
+        }
 
         const orderRequest = {
             id: orderId,
             currency: 'KES',
             amount: amount,
             description: 'E-commerce Order Payment',
-            callback_url: process.env.PESAPAL_CALLBACK_URL + `?orderId=${orderId}`,
+            callback_url: (process.env.PESAPAL_CALLBACK_URL || '') + `?orderId=${orderId}`,
             notification_id: ipn_id,
             billing_address: {
                 email_address: email,
@@ -66,18 +90,25 @@ export const initiatePesapalPayment = async (req, res) => {
         };
 
         const orderResponse = await axios.post(
-            `${process.env.PESAPAL_BASE_URL}/api/Transactions/SubmitOrderRequest`,
+            `${PESAPAL_BASE}/api/Transactions/SubmitOrderRequest`,
             orderRequest,
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );
 
-        console.log("✅ Pesapal Order Response:", orderResponse.data);
-        res.json(orderResponse.data);
+        console.log('✅ Pesapal Order Response:', orderResponse.data);
+        // normalize response to include redirect_url and order_tracking_id for frontend
+        const resp = orderResponse.data;
+        const normalized = {
+            redirect_url: resp.redirect_url || resp.redirectUrl || resp.data?.redirect_url,
+            order_tracking_id: resp.order_tracking_id || resp.orderTrackingId || resp.data?.order_tracking_id,
+            raw: resp,
+        };
+        res.json(normalized);
     } catch (error) {
         console.error("❌ Pesapal Error:", error.response?.data || error.message);
         res.status(500).json({
