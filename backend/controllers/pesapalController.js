@@ -56,25 +56,33 @@ export const initiatePesapalPayment = async (req, res) => {
         const token = await getPesapalToken();
         console.log('✅ Pesapal Token:', token);
 
-        // Register IPN (notification) if callback provided
+        // Register IPN (notification) if callback provided.
+        // Prefer an explicitly configured public IPN URL (PESAPAL_PUBLIC_IPN) when registering,
+        // otherwise fall back to PESAPAL_CALLBACK_URL which is typically the backend endpoint.
         let ipn_id = process.env.PESAPAL_IPN_ID;
-        try {
-            const ipnRegistrationResponse = await axios.post(
-                `${PESAPAL_BASE}/api/URLSetup/RegisterIPN`,
-                {
-                    url: process.env.PESAPAL_CALLBACK_URL,
-                    ipn_notification_type: 'GET',
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
+        const ipnUrlToRegister = process.env.PESAPAL_PUBLIC_IPN || process.env.PESAPAL_CALLBACK_URL;
+        if (ipnUrlToRegister) {
+            try {
+                const ipnRegistrationResponse = await axios.post(
+                    `${PESAPAL_BASE}/api/URLSetup/RegisterIPN`,
+                    {
+                        url: ipnUrlToRegister,
+                        ipn_notification_type: 'GET',
                     },
-                }
-            );
-            ipn_id = ipnRegistrationResponse.data?.ipn_id || ipnRegistrationResponse.data?.notification_id || ipn_id;
-        } catch (ipnErr) {
-            console.warn('⚠️ IPN registration failed (continuing):', ipnErr.response?.data || ipnErr.message);
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                ipn_id = ipnRegistrationResponse.data?.ipn_id || ipnRegistrationResponse.data?.notification_id || ipn_id;
+                console.log('Registered IPN URL with Pesapal:', ipnUrlToRegister, 'ipn_id=', ipn_id);
+            } catch (ipnErr) {
+                console.warn('⚠️ IPN registration failed (continuing):', ipnErr.response?.data || ipnErr.message);
+            }
+        } else {
+            console.log('No PESAPAL_PUBLIC_IPN or PESAPAL_CALLBACK_URL configured — skipping IPN registration');
         }
 
         // Ensure amount is formatted as a string with two decimals (Pesapal expects a decimal string)

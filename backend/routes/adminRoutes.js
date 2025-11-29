@@ -11,4 +11,9 @@ router.get('/dashboard-data', getAdminStats);
 router.get('/discounted-carousel', getDiscountedCarousel);
 router.post('/discounted-carousel', protect, admin, setDiscountedCarousel);
 
+// Transactions
+import { getAllTransactions, getTransactionById } from '../controllers/transactionController.js';
+router.get('/transactions', protect, admin, getAllTransactions);
+router.get('/transactions/:id', protect, admin, getTransactionById);
+
 export default router;
