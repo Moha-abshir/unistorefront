@@ -81,35 +81,34 @@ export const initiatePesapalPayment = async (req, res) => {
         const token = await getPesapalToken();
         console.log('✅ Pesapal Token:', token);
 
-        // Register IPN (notification) asynchronously to avoid blocking redirect
+        // Register IPN (notification) synchronously so we wait for Pesapal to acknowledge
         // Prefer an explicitly configured public IPN URL (PESAPAL_PUBLIC_IPN) when registering,
         // otherwise fall back to PESAPAL_CALLBACK_URL which is typically the backend endpoint.
         let ipn_id = process.env.PESAPAL_IPN_ID;
         const ipnUrlToRegister = process.env.PESAPAL_PUBLIC_IPN || process.env.PESAPAL_CALLBACK_URL;
-        
-        // Register IPN asynchronously without blocking the redirect
+
         if (ipnUrlToRegister) {
-            (async () => {
-                try {
-                    const ipnRegistrationResponse = await axios.post(
-                        `${PESAPAL_BASE}/api/URLSetup/RegisterIPN`,
-                        {
-                            url: ipnUrlToRegister,
-                            ipn_notification_type: 'GET',
+            try {
+                const ipnRegistrationResponse = await axios.post(
+                    `${PESAPAL_BASE}/api/URLSetup/RegisterIPN`,
+                    {
+                        url: ipnUrlToRegister,
+                        ipn_notification_type: 'GET',
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
                         },
-                        {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                Authorization: `Bearer ${token}`,
-                            },
-                        }
-                    );
-                    ipn_id = ipnRegistrationResponse.data?.ipn_id || ipnRegistrationResponse.data?.notification_id || ipn_id;
-                    console.log('Registered IPN URL with Pesapal:', ipnUrlToRegister, 'ipn_id=', ipn_id);
-                } catch (ipnErr) {
-                    console.warn('⚠️ IPN registration failed (non-blocking):', ipnErr.response?.data || ipnErr.message);
-                }
-            })();
+                    }
+                );
+                ipn_id = ipnRegistrationResponse.data?.ipn_id || ipnRegistrationResponse.data?.notification_id || ipn_id;
+                console.log('Registered IPN URL with Pesapal:', ipnUrlToRegister, 'ipn_id=', ipn_id);
+            } catch (ipnErr) {
+                // Fail the initiation if IPN registration fails — keep diagnostic info for frontend
+                console.error('❌ IPN registration failed:', ipnErr.response?.data || ipnErr.message);
+                return res.status(500).json({ message: 'Failed to register IPN with Pesapal', error: ipnErr.response?.data || ipnErr.message });
+            }
         } else {
             console.log('No PESAPAL_PUBLIC_IPN or PESAPAL_CALLBACK_URL configured — skipping IPN registration');
         }
