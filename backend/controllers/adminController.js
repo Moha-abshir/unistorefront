@@ -77,7 +77,18 @@ export const getDiscountedCarousel = async (req, res) => {
     if (!setting || !setting.productIds || setting.productIds.length === 0) {
       return res.json([]);
     }
-    res.json(setting.productIds);
+
+    // compute discountedPrice for each product using setting.discountPercent
+    const percent = Number(setting.discountPercent) || 0;
+    const products = setting.productIds.map((p) => {
+      const price = Number(p.price || 0);
+      const discountedPrice = Math.max(0, price - (price * percent) / 100);
+      return {
+        ...p.toObject(),
+        discountedPrice,
+      };
+    });
+    res.json({ products, discountPercent: percent });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching carousel', error: error.message });
   }
@@ -86,7 +97,7 @@ export const getDiscountedCarousel = async (req, res) => {
 // ✅ Set discounted carousel products (admin only, unlimited)
 export const setDiscountedCarousel = async (req, res) => {
   try {
-    const { productIds } = req.body;
+    const { productIds, discountPercent } = req.body;
     
     if (!Array.isArray(productIds)) {
       return res.status(400).json({ message: 'productIds must be an array' });
@@ -102,15 +113,26 @@ export const setDiscountedCarousel = async (req, res) => {
 
     let setting = await CarouselSetting.findOne();
     if (!setting) {
-      setting = new CarouselSetting({ productIds });
+      setting = new CarouselSetting({ productIds, discountPercent: Number(discountPercent) || 0 });
     } else {
       setting.productIds = productIds;
+      if (typeof discountPercent !== 'undefined') setting.discountPercent = Number(discountPercent) || 0;
       setting.updatedAt = Date.now();
     }
 
     await setting.save();
     const populated = await setting.populate('productIds');
-    res.json(populated.productIds);
+    // return products with computed discountedPrice and the discountPercent
+    const percent = Number(populated.discountPercent) || 0;
+    const products = populated.productIds.map((p) => {
+      const price = Number(p.price || 0);
+      const discountedPrice = Math.max(0, price - (price * percent) / 100);
+      return {
+        ...p.toObject(),
+        discountedPrice,
+      };
+    });
+    res.json({ products, discountPercent: percent });
   } catch (error) {
     res.status(500).json({ message: 'Error updating carousel', error: error.message });
   }

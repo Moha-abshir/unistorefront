@@ -7,6 +7,8 @@ const carouselSettingSchema = new mongoose.Schema({
       ref: 'Product',
     },
   ],
+  // percentage discount to apply to all carousel products (0-100)
+  discountPercent: { type: Number, default: 10 },
   updatedAt: { type: Date, default: Date.now },
 }, { timestamps: true });
 
