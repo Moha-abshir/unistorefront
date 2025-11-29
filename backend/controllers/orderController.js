@@ -158,7 +158,7 @@ export const sendPaymentReminder = async (req, res) => {
     }
 
     const frontend = process.env.FRONTEND_URL || 'https://muzafey.online';
-    const payLink = `${frontend}/order-confirmation?orderId=${order._id}`;
+    const payLink = `${frontend}/pay?orderId=${order._id}`;
 
     const subject = `Payment reminder for order ${order.orderId || order._id}`;
     const html = `
@@ -168,6 +168,16 @@ export const sendPaymentReminder = async (req, res) => {
       <p>Please complete payment here: <a href="${payLink}">Complete payment</a></p>
       <p>If you've already paid, please ignore this message.</p>
     `;
+
+    // Save reminder message to order
+    const reminderMessage = `Payment reminder sent for order ${order.orderId || order._id} - Amount due: KES ${(order.finalAmount || order.totalPrice).toFixed(2)}`;
+    order.reminders = order.reminders || [];
+    order.reminders.push({
+      message: reminderMessage,
+      sentAt: new Date(),
+      read: false,
+    });
+    await order.save();
 
     try {
       if (order.user?.email) {
@@ -182,6 +192,63 @@ export const sendPaymentReminder = async (req, res) => {
   } catch (error) {
     console.error('Error sending payment reminder:', error.message || error);
     res.status(500).json({ message: 'Failed to send payment reminder' });
+  }
+};
+
+// Get all reminders for the logged-in customer
+export const getReminderMessages = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id })
+      .select('orderId _id finalAmount totalPrice paymentStatus reminders createdAt')
+      .sort({ createdAt: -1 });
+
+    // Flatten reminders with order context
+    const allReminders = [];
+    orders.forEach((order) => {
+      if (order.reminders && order.reminders.length > 0) {
+        order.reminders.forEach((reminder) => {
+          allReminders.push({
+            _id: reminder._id,
+            orderId: order.orderId || order._id,
+            message: reminder.message,
+            sentAt: reminder.sentAt,
+            read: reminder.read,
+            paymentStatus: order.paymentStatus,
+            amount: order.finalAmount || order.totalPrice,
+          });
+        });
+      }
+    });
+
+    res.json(allReminders);
+  } catch (error) {
+    console.error('Error fetching reminders:', error.message || error);
+    res.status(500).json({ message: 'Error fetching reminders', error: error.message });
+  }
+};
+
+// Mark a reminder as read
+export const markReminderAsRead = async (req, res) => {
+  try {
+    const { orderId, reminderId } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // Ensure user owns the order
+    if (order.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    const reminder = order.reminders.id(reminderId);
+    if (!reminder) return res.status(404).json({ message: 'Reminder not found' });
+
+    reminder.read = true;
+    await order.save();
+
+    res.json({ message: 'Reminder marked as read' });
+  } catch (error) {
+    console.error('Error marking reminder as read:', error.message || error);
+    res.status(500).json({ message: 'Error updating reminder' });
   }
 };
 

@@ -48,6 +48,13 @@ const orderSchema = new mongoose.Schema(
       enum: ['Assigned', 'In Transit', 'Delivered'],
       default: 'Assigned',
     },
+    reminders: [
+      {
+        message: { type: String },
+        sentAt: { type: Date, default: Date.now },
+        read: { type: Boolean, default: false },
+      },
+    ],
   },
   { timestamps: true }
 );

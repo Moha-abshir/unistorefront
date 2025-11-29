@@ -8,6 +8,8 @@ import {
   deleteOrder,
   sendPaymentReminder,
   updatePaymentStatus,
+  getReminderMessages,
+  markReminderAsRead,
 } from '../controllers/orderController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
@@ -16,6 +18,8 @@ const router = express.Router();
 // User routes
 router.post('/', protect, createOrder);
 router.get('/myorders', protect, getMyOrders);
+router.get('/reminders/all', protect, getReminderMessages);
+router.put('/reminders/mark-read', protect, markReminderAsRead);
 
 // Admin routes
 router.get('/', protect, admin, getAllOrders);
