@@ -7,6 +7,8 @@ const transactionSchema = new mongoose.Schema({
   amount: { type: Number },
   status: { type: String }, // e.g. 'Success', 'Failed'
   rawResponse: { type: Object },
+  isDeleted: { type: Boolean, default: false },
+  deletedAt: { type: Date },
 }, { timestamps: true });
 
 const Transaction = mongoose.model('Transaction', transactionSchema);

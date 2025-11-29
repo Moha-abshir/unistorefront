@@ -13,9 +13,13 @@ router.get('/discounted-carousel', getDiscountedCarousel);
 router.post('/discounted-carousel', protect, admin, setDiscountedCarousel);
 
 // Transactions
-import { getAllTransactions, getTransactionById } from '../controllers/transactionController.js';
+import { getAllTransactions, getTransactionById, softDeleteTransaction, restoreTransaction, hardDeleteTransaction, getTrashedTransactions } from '../controllers/transactionController.js';
 router.get('/transactions', protect, admin, getAllTransactions);
+router.get('/transactions/trash', protect, admin, getTrashedTransactions);
 router.get('/transactions/:id', protect, admin, getTransactionById);
+router.delete('/transactions/:id', protect, admin, softDeleteTransaction);
+router.put('/transactions/:id/restore', protect, admin, restoreTransaction);
+router.delete('/transactions/:id/permanent', protect, admin, hardDeleteTransaction);
 
 // App Lock endpoints
 router.post('/applock/set-pin', protect, admin, setAdminPin);
