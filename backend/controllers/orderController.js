@@ -1,6 +1,9 @@
 import Order from '../models/Order.js';
 import Product from '../models/product.js';
 import Coupon from '../models/Coupon.js';
+import User from '../models/User.js';
+import { sendEmail } from '../utils/sendEmail.js';
+import Transaction from '../models/Transaction.js';
 
 // Create a new order
 export const createOrder = async (req, res) => {
@@ -135,6 +138,110 @@ export const updateOrderStatus = async (req, res) => {
     res.json({ message: 'Order status updated', order });
   } catch (error) {
     res.status(500).json({ message: 'Error updating order', error: error.message });
+  }
+};
+
+// Admin: send payment reminder to customer for unpaid orders
+export const sendPaymentReminder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id).populate('user', 'name email');
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    if (order.paymentStatus === 'Paid') {
+      return res.status(400).json({ message: 'Order is already paid' });
+    }
+
+    const frontend = process.env.FRONTEND_URL || 'https://muzafey.online';
+    const payLink = `${frontend}/order-confirmation?orderId=${order._id}`;
+
+    const subject = `Payment reminder for order ${order.orderId || order._id}`;
+    const html = `
+      <p>Hi ${order.user?.name || 'Customer'},</p>
+      <p>This is a reminder to complete payment for your order <strong>${order.orderId || order._id}</strong>.</p>
+      <p>Amount due: <strong>KES ${(order.finalAmount || order.totalPrice).toFixed(2)}</strong></p>
+      <p>Please complete payment here: <a href="${payLink}">Complete payment</a></p>
+      <p>If you've already paid, please ignore this message.</p>
+    `;
+
+    try {
+      if (order.user?.email) {
+        await sendEmail(order.user.email, subject, html);
+      }
+    } catch (emailErr) {
+      console.error('Failed to send payment reminder email:', emailErr.message || emailErr);
+      // Do not fail the whole request if email failed
+    }
+
+    res.json({ message: 'Payment reminder sent' });
+  } catch (error) {
+    console.error('Error sending payment reminder:', error.message || error);
+    res.status(500).json({ message: 'Failed to send payment reminder' });
+  }
+};
+
+// Admin: update payment status (mark Paid/Unpaid)
+export const updatePaymentStatus = async (req, res) => {
+  try {
+    const { paymentStatus } = req.body;
+    if (!['Paid', 'Unpaid'].includes(paymentStatus)) {
+      return res.status(400).json({ message: 'Invalid payment status' });
+    }
+
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // If marking Paid and order was unpaid, finalize stock and create transaction
+    if (paymentStatus === 'Paid' && order.paymentStatus !== 'Paid') {
+      // Decrement stock (if not already processed)
+      for (const item of order.orderItems) {
+        try {
+          const product = await Product.findById(item.product);
+          if (!product) continue;
+          if (item.qty > product.stock) {
+            console.warn(`Insufficient stock while marking order paid: ${product._id}`);
+            // continue without failing; admin should handle stock shortages
+          } else {
+            product.stock -= item.qty;
+            await product.save();
+          }
+        } catch (pErr) {
+          console.error('Error decrementing stock while marking paid:', pErr.message || pErr);
+        }
+      }
+
+      order.paymentStatus = 'Paid';
+      order.status = order.status === 'Pending' ? 'Processing' : order.status;
+      await order.save();
+
+      // Record transaction (admin-marked)
+      try {
+        const tx = new Transaction({
+          user: order.user,
+          mpesaReceiptNumber: null,
+          phoneNumber: order.shippingAddress?.phone || undefined,
+          amount: order.finalAmount || order.totalPrice || 0,
+          status: 'AdminMarkedPaid',
+          rawResponse: { note: 'Marked Paid by admin' },
+        });
+        await tx.save();
+      } catch (txErr) {
+        console.error('Failed to record admin-marked transaction:', txErr.message || txErr);
+      }
+
+      return res.json({ message: 'Order marked as Paid', order });
+    }
+
+    // If marking Unpaid
+    if (paymentStatus === 'Unpaid') {
+      order.paymentStatus = 'Unpaid';
+      await order.save();
+      return res.json({ message: 'Order marked as Unpaid', order });
+    }
+
+    res.json({ message: 'No change' });
+  } catch (error) {
+    console.error('Error updating payment status:', error.message || error);
+    res.status(500).json({ message: 'Failed to update payment status' });
   }
 };
 

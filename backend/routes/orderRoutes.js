@@ -6,6 +6,8 @@ import {
   getOrderById,
   updateOrderStatus,
   deleteOrder,
+  sendPaymentReminder,
+  updatePaymentStatus,
 } from '../controllers/orderController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
@@ -19,6 +21,8 @@ router.get('/myorders', protect, getMyOrders);
 router.get('/', protect, admin, getAllOrders);
 router.get('/:id', protect, admin, getOrderById);
 router.put('/:id/status', protect, admin, updateOrderStatus);
+router.put('/:id/payment-status', protect, admin, updatePaymentStatus);
+router.post('/:id/send-payment-reminder', protect, admin, sendPaymentReminder);
 router.delete('/:id', protect, admin, deleteOrder);
 
 export default router;
