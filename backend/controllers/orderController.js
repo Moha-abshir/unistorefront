@@ -209,7 +209,9 @@ export const getReminderMessages = async (req, res) => {
         order.reminders.forEach((reminder) => {
           allReminders.push({
             _id: reminder._id,
+            // orderId (for display) and orderDbId (the actual DB _id) - keep display-friendly orderId
             orderId: order.orderId || order._id,
+            orderDbId: order._id,
             message: reminder.message,
             sentAt: reminder.sentAt,
             read: reminder.read,
