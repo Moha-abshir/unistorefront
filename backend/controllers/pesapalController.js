@@ -77,13 +77,16 @@ export const initiatePesapalPayment = async (req, res) => {
             console.warn('⚠️ IPN registration failed (continuing):', ipnErr.response?.data || ipnErr.message);
         }
 
+        // Ensure amount is formatted as a string with two decimals (Pesapal expects a decimal string)
+        const formattedAmount = typeof amount === 'number' ? amount.toFixed(2) : String(amount);
+
         const orderRequest = {
             // Pesapal requires a merchant reference field (unique per merchant)
             merchant_reference: orderId,
             id: orderId,
             currency: 'KES',
-            amount: amount,
-            description: 'E-commerce Order Payment',
+            amount: formattedAmount,
+            description: 'muzafey order payments',
             callback_url: (process.env.PESAPAL_CALLBACK_URL || '') + `?orderId=${orderId}`,
             notification_id: ipn_id,
             billing_address: {
@@ -120,7 +123,12 @@ export const initiatePesapalPayment = async (req, res) => {
             } catch (delErr) {
                 console.error('Error deleting order after Pesapal returned error:', delErr.message);
             }
-            return res.status(400).json({ message: 'Pesapal initiation failed', error: resp.error || resp });
+            // Return more diagnostic info to frontend to aid debugging
+            return res.status(400).json({
+                message: 'Pesapal initiation failed',
+                pesapalResponse: resp,
+                sentPayload: orderRequest,
+            });
         }
 
         const normalized = {
