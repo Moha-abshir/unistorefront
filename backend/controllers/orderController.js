@@ -233,7 +233,17 @@ export const getReminderMessages = async (req, res) => {
 export const markReminderAsRead = async (req, res) => {
   try {
     const { orderId, reminderId } = req.body;
-    const order = await Order.findById(orderId);
+    // orderId may be either the DB _id or the human-friendly orderId (e.g. M004)
+    let order = null;
+    try {
+      order = await Order.findById(orderId);
+    } catch (e) {
+      // invalid ObjectId or other error -- we'll try to find by orderId field
+      order = null;
+    }
+    if (!order) {
+      order = await Order.findOne({ orderId: orderId });
+    }
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
     // Ensure user owns the order

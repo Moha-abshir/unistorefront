@@ -54,6 +54,21 @@ const getPesapalToken = async () => {
 export const initiatePesapalPayment = async (req, res) => {
     try {
         const { amount, email, phone, orderId } = req.body;
+        // Validate order exists and isn't already paid
+        if (!orderId) {
+            return res.status(400).json({ message: 'Missing orderId' });
+        }
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        if (order.paymentStatus === 'Paid') {
+            return res.status(400).json({ message: 'Order is already paid' });
+        }
+        if (order.status && order.status !== 'Pending' && order.status !== 'Processing') {
+            // If order already shipping/delivered/cancelled, block payment
+            return res.status(400).json({ message: `Order cannot be paid in its current status: ${order.status}` });
+        }
         const token = await getPesapalToken();
         console.log('✅ Pesapal Token:', token);
 
