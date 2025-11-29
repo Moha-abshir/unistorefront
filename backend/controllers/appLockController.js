@@ -2,7 +2,7 @@ import AdminAppLock from '../models/AdminAppLock.js';
 
 export const setAdminPin = async (req, res) => {
   try {
-    const { pin } = req.body;
+    const { pin, previousPin } = req.body;
     const adminId = req.user._id;
 
     if (!pin || pin.length < 4 || pin.length > 6) {
@@ -12,6 +12,15 @@ export const setAdminPin = async (req, res) => {
     // Check if PIN already exists for this admin
     let appLock = await AdminAppLock.findOne({ admin: adminId });
     if (appLock) {
+      // If changing existing PIN, require previousPin verification
+      if (!previousPin) {
+        return res.status(400).json({ message: 'Previous PIN is required to change PIN' });
+      }
+      const valid = await appLock.verifyPin(previousPin);
+      if (!valid) {
+        return res.status(401).json({ message: 'Previous PIN is incorrect' });
+      }
+
       appLock.pinHash = pin;
       await appLock.save();
     } else {
@@ -72,12 +81,21 @@ export const getAdminLockStatus = async (req, res) => {
 
 export const toggleAppLock = async (req, res) => {
   try {
-    const { isEnabled } = req.body;
+    const { isEnabled, previousPin } = req.body;
     const adminId = req.user._id;
 
     const appLock = await AdminAppLock.findOne({ admin: adminId });
     if (!appLock) {
       return res.status(404).json({ message: 'App lock not configured' });
+    }
+
+    // If disabling, require current PIN verification for security
+    if (isEnabled === false) {
+      if (!previousPin) {
+        return res.status(400).json({ message: 'Current PIN is required to disable app lock' });
+      }
+      const valid = await appLock.verifyPin(previousPin);
+      if (!valid) return res.status(401).json({ message: 'Current PIN is incorrect' });
     }
 
     appLock.isEnabled = isEnabled;
