@@ -2,6 +2,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import Order from '../models/Order.js';
 import Product from '../models/product.js';
+import Transaction from '../models/Transaction.js';
 
 // Normalize PESAPAL base URL to support sandbox or production
 const rawBase = process.env.PESAPAL_BASE_URL || 'https://cybqa.pesapal.com/pesapalv3';
@@ -207,8 +208,24 @@ export const handlePesapalCallback = async (req, res) => {
                         console.error('Error decrementing product stock after Pesapal success:', pErr.message);
                     }
                 }
-                // update status to Processing
-                await Order.findByIdAndUpdate(order._id, { status: 'Processing' });
+                // update status to Processing and mark as Paid
+                await Order.findByIdAndUpdate(order._id, { status: 'Processing', paymentStatus: 'Paid' });
+
+                // Record transaction for admin visibility
+                try {
+                    const tx = new Transaction({
+                        user: order.user,
+                        mpesaReceiptNumber: OrderTrackingId || null,
+                        phoneNumber: order.shippingAddress?.phone || undefined,
+                        amount: order.finalAmount || order.totalPrice || 0,
+                        status: 'Success',
+                        rawResponse: statusResponse.data,
+                    });
+                    await tx.save();
+                    console.log('Saved Pesapal transaction', tx._id);
+                } catch (txErr) {
+                    console.error('Error saving Pesapal transaction:', txErr.message || txErr);
+                }
             }
             return res.redirect(`https://muzafey.online/order-confirmation?orderId=${OrderMerchantReference}`);
         }
