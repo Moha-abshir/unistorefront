@@ -27,4 +27,10 @@ router.post('/applock/verify-pin', protect, admin, verifyAdminPin);
 router.get('/applock/status', protect, admin, getAdminLockStatus);
 router.put('/applock/toggle', protect, admin, toggleAppLock);
 
+// Admin categories (managed list)
+import { getAdminCategories, createCategory, deleteCategory } from '../controllers/categoryController.js';
+router.get('/categories', protect, admin, getAdminCategories);
+router.post('/categories', protect, admin, createCategory);
+router.delete('/categories/:id', protect, admin, deleteCategory);
+
 export default router;
