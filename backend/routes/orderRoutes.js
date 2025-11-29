@@ -19,7 +19,7 @@ router.get('/myorders', protect, getMyOrders);
 
 // Admin routes
 router.get('/', protect, admin, getAllOrders);
-router.get('/:id', protect, admin, getOrderById);
+router.get('/:id', protect, getOrderById);
 router.put('/:id/status', protect, admin, updateOrderStatus);
 router.put('/:id/payment-status', protect, admin, updatePaymentStatus);
 router.post('/:id/send-payment-reminder', protect, admin, sendPaymentReminder);
