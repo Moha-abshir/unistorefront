@@ -33,4 +33,12 @@ router.get('/categories', protect, admin, getAdminCategories);
 router.post('/categories', protect, admin, createCategory);
 router.delete('/categories/:id', protect, admin, deleteCategory);
 
+// Shipping Fee endpoints
+import { getShippingFee, getAdminShippingFees, createShippingFee, updateShippingFee, deleteShippingFee } from '../controllers/shippingFeeController.js';
+router.get('/shipping-fees', getShippingFee); // public: get current fee
+router.get('/shipping-fees/admin/list', protect, admin, getAdminShippingFees);
+router.post('/shipping-fees', protect, admin, createShippingFee);
+router.patch('/shipping-fees/:id', protect, admin, updateShippingFee);
+router.delete('/shipping-fees/:id', protect, admin, deleteShippingFee);
+
 export default router;
