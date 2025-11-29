@@ -53,22 +53,31 @@ const getPesapalToken = async () => {
 
 export const initiatePesapalPayment = async (req, res) => {
     try {
-        const { amount, email, phone, orderId } = req.body;
-        // Validate order exists and isn't already paid
-        if (!orderId) {
-            return res.status(400).json({ message: 'Missing orderId' });
-        }
-        const order = await Order.findById(orderId);
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-        if (order.paymentStatus === 'Paid') {
-            return res.status(400).json({ message: 'Order is already paid' });
-        }
-        if (order.status && order.status !== 'Pending' && order.status !== 'Processing') {
-            // If order already shipping/delivered/cancelled, block payment
-            return res.status(400).json({ message: `Order cannot be paid in its current status: ${order.status}` });
-        }
+                const { amount, email, phone, orderId } = req.body;
+                // Validate order exists and isn't already paid. Accept either DB _id or human-friendly orderId.
+                if (!orderId) {
+                        return res.status(400).json({ message: 'Missing orderId' });
+                }
+                let order = null;
+                try {
+                    order = await Order.findById(orderId);
+                } catch (e) {
+                    order = null;
+                }
+                if (!order) {
+                    order = await Order.findOne({ orderId: orderId });
+                }
+                if (!order) {
+                    return res.status(404).json({ message: 'Order not found' });
+                }
+                if (order.paymentStatus === 'Paid') {
+                    return res.status(400).json({ message: 'Order is already paid' });
+                }
+                if (order.status && !['Pending','Processing'].includes(order.status)) {
+                    return res.status(400).json({ message: `Order cannot be paid in its current status: ${order.status}` });
+                }
+                // Use DB _id as merchant reference to ensure callbacks can identify the order reliably
+                const merchantRef = order._id.toString();
         const token = await getPesapalToken();
         console.log('✅ Pesapal Token:', token);
 
@@ -105,13 +114,13 @@ export const initiatePesapalPayment = async (req, res) => {
         const formattedAmount = typeof amount === 'number' ? amount.toFixed(2) : String(amount);
 
         const orderRequest = {
-            // Pesapal requires a merchant reference field (unique per merchant)
-            merchant_reference: orderId,
-            id: orderId,
+            // Pesapal requires a merchant reference field (unique per merchant) - use DB _id
+            merchant_reference: merchantRef,
+            id: merchantRef,
             currency: 'KES',
             amount: formattedAmount,
             description: 'muzafey order payments',
-            callback_url: (process.env.PESAPAL_CALLBACK_URL || '') + `?orderId=${orderId}`,
+            callback_url: (process.env.PESAPAL_CALLBACK_URL || '') + `?orderId=${merchantRef}`,
             notification_id: ipn_id,
             billing_address: {
                 email_address: email,
@@ -136,13 +145,13 @@ export const initiatePesapalPayment = async (req, res) => {
         const resp = orderResponse.data;
 
         // If Pesapal returned an error object inside a 200 response, treat as failure
-        if (resp && (resp.error || (resp.status && String(resp.status).startsWith('5')))) {
+            if (resp && (resp.error || (resp.status && String(resp.status).startsWith('5')))) {
             console.error('Pesapal returned error in SubmitOrderRequest:', resp.error || resp);
             // delete order if it exists
             try {
-                if (orderId) {
-                    await Order.findByIdAndDelete(orderId);
-                    console.log(`Removed order ${orderId} after Pesapal returned error`);
+                if (order && order._id) {
+                    await Order.findByIdAndDelete(order._id);
+                    console.log(`Removed order ${order._id} after Pesapal returned error`);
                 }
             } catch (delErr) {
                 console.error('Error deleting order after Pesapal returned error:', delErr.message);
@@ -165,10 +174,9 @@ export const initiatePesapalPayment = async (req, res) => {
         console.error("❌ Pesapal Error:", error.response?.data || error.message);
         // If order exists, delete it to avoid orphan unpaid orders
         try {
-            const { orderId } = req.body || {};
-            if (orderId) {
-                await Order.findByIdAndDelete(orderId);
-                console.log(`Removed order ${orderId} after Pesapal initiation failure`);
+            if (order && order._id) {
+                await Order.findByIdAndDelete(order._id);
+                console.log(`Removed order ${order._id} after Pesapal initiation failure`);
             }
         } catch (delErr) {
             console.error('Error deleting order after Pesapal initiation failure:', delErr.message);
@@ -201,7 +209,17 @@ export const handlePesapalCallback = async (req, res) => {
 
         // success
         if (status_code === 1) {
-            const order = await Order.findById(OrderMerchantReference);
+            // OrderMerchantReference should be the DB _id (we send that as merchant reference).
+            // But accept the human-friendly orderId too for backward compatibility.
+            let order = null;
+            try {
+                order = await Order.findById(OrderMerchantReference);
+            } catch (e) {
+                order = null;
+            }
+            if (!order) {
+                order = await Order.findOne({ orderId: OrderMerchantReference });
+            }
             if (order && order.paymentMethod === 'Pesapal' && order.status !== 'Processing') {
                 // decrement each product's stock
                 for (const item of order.orderItems) {
@@ -242,13 +260,23 @@ export const handlePesapalCallback = async (req, res) => {
                     console.error('Error saving Pesapal transaction:', txErr.message || txErr);
                 }
             }
-            return res.redirect(`https://muzafey.online/order-confirmation?orderId=${OrderMerchantReference}`);
+            // redirect including the DB _id when possible
+            const redirectId = order && order._id ? order._id : OrderMerchantReference;
+            return res.redirect(`https://muzafey.online/order-confirmation?orderId=${redirectId}`);
         }
 
         // failed or other non-success statuses: remove the pending order so it doesn't go through
         try {
-            await Order.findByIdAndDelete(OrderMerchantReference);
-            console.log(`Deleted order ${OrderMerchantReference} after failed Pesapal payment`);
+            // Try to delete by DB id first, otherwise try by human orderId
+            let delOrder = null;
+            try { delOrder = await Order.findById(OrderMerchantReference); } catch (e) { delOrder = null; }
+            if (delOrder && delOrder._id) {
+                await Order.findByIdAndDelete(delOrder._id);
+                console.log(`Deleted order ${delOrder._id} after failed Pesapal payment`);
+            } else {
+                await Order.findOneAndDelete({ orderId: OrderMerchantReference });
+                console.log(`Deleted order with orderId ${OrderMerchantReference} after failed Pesapal payment`);
+            }
         } catch (delErr) {
             console.error('Error deleting order after failed Pesapal payment:', delErr.message);
         }
