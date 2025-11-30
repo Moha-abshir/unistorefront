@@ -119,6 +119,16 @@ export const loginUser = async (req, res) => {
     const isMatch = await user.matchPassword(password);
     if (!isMatch)
       return res.status(401).json({ message: "Invalid email or password" });
+    
+    // Block login if email not verified
+    if (!user.isEmailVerified) {
+      return res.status(403).json({
+        success: false,
+        message: "Email not verified. Please verify your email before logging in.",
+        resendVerification: true,
+        resendEndpoint: "/api/auth/resend-verification-email",
+      });
+    }
 
     const token = generateToken(user);
 

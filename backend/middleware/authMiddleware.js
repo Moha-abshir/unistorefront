@@ -20,6 +20,11 @@ export const protect = async (req, res, next) => {
       res.status(401).json({ message: 'User not found' });
       return;
     }
+    // Deny access if email not verified
+    if (!req.user.isEmailVerified) {
+      res.status(403).json({ message: 'Email not verified. Please verify your email to access this resource.' });
+      return;
+    }
     next();
   } catch (error) {
     res.status(401).json({ message: 'Not authorized, token failed' });
@@ -43,6 +48,11 @@ export const agentProtect = async (req, res, next) => {
     req.user = await User.findById(decoded.id).select('-password');
     if (!req.user || req.user.role !== 'agent') {
       res.status(401).json({ message: 'Agent not found' });
+      return;
+    }
+    // Deny access if email not verified for agent
+    if (!req.user.isEmailVerified) {
+      res.status(403).json({ message: 'Email not verified. Please verify your email to access this resource.' });
       return;
     }
     next();
