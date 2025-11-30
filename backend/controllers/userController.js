@@ -1,6 +1,8 @@
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import { sendEmail } from '../utils/sendEmail.js';
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -28,13 +30,53 @@ export const registerUser = async (req, res) => {
     const user = await User.create({ name, email, password, phone });
 
     if (user) {
-      res.status(201).json({
+      // Generate verification token and expiry
+      const verificationToken = crypto.randomBytes(20).toString('hex');
+      const verificationTokenExpire = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+
+      user.verificationToken = verificationToken;
+      user.verificationTokenExpire = verificationTokenExpire;
+      await user.save();
+
+      // Build verification email using reminder-style simple template
+      const frontend = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:3000';
+      const verificationUrl = `${frontend}/verify-email/${verificationToken}`;
+      const subject = 'Verify Your Email Address';
+      const html = `
+        <div style="font-family: Arial, Helvetica, sans-serif; color:#333;">
+          <p>Hi ${user.name || 'Customer'},</p>
+          <p>Thank you for creating an account with us. Please verify your email address by clicking the link below:</p>
+          <p><a href="${verificationUrl}" style="display:inline-block;padding:10px 14px;background:#28a745;color:#fff;border-radius:6px;text-decoration:none;">Verify Email Address</a></p>
+          <p>Or copy this link into your browser: <a href="${verificationUrl}">${verificationUrl}</a></p>
+          <p>This link will expire in 24 hours.</p>
+          <p>If you did not create this account, please ignore this email.</p>
+          <hr />
+          <p style="font-size:12px;color:#666;">© ${new Date().getFullYear()} Manwell Store</p>
+        </div>
+      `;
+
+      let emailSent = true;
+      try {
+        await sendEmail(user.email, subject, html);
+      } catch (emailErr) {
+        console.error('Failed to send verification email on register:', emailErr && emailErr.message ? emailErr.message : emailErr);
+        emailSent = false;
+      }
+
+      const payloadUser = {
         _id: user._id,
         name: user.name,
         email: user.email,
         phone: user.phone,
         role: user.role,
+      };
+
+      // Return created user info; include resend hint if email failed
+      return res.status(201).json({
+        ...payloadUser,
         token: generateToken(user._id),
+        message: emailSent ? 'Verification email sent. Please check your inbox.' : 'Account created but failed to send verification email.',
+        resendVerification: emailSent ? false : true,
       });
     } else {
       res.status(400).json({ message: 'Invalid user data' });
