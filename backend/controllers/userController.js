@@ -142,11 +142,13 @@ export const verifyCustomerByAdmin = async (req, res) => {
     if (user.role !== 'user' && user.role !== 'customer')
       return res.status(400).json({ message: 'Only user/customer accounts can be verified' });
 
-    if (user.isVerified)
+    if (user.isEmailVerified)
       return res.status(400).json({ message: 'Customer is already verified' });
 
-    user.isVerified = true;
+    // mark email as verified
+    user.isEmailVerified = true;
     user.verificationToken = undefined;
+    user.verificationTokenExpire = undefined;
     await user.save();
 
     res.json({ message: 'Customer verified successfully' });
