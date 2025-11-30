@@ -26,8 +26,9 @@ export const registerUser = async (req, res) => {
       verificationTokenExpire,
     });
 
-    // Send verification email
-    const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+    // Send verification email -> point to backend verify endpoint so link works from email clients
+    const backendBase = process.env.SERVER_URL || process.env.API_URL || `http://localhost:${process.env.PORT || 5000}`;
+    const verificationUrl = `${backendBase}/api/auth/verify-email/${verificationToken}`;
 
     const html = `
       <div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f7f8fa; padding: 40px 0;">
@@ -330,6 +331,38 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
+// GET handler for email links: verify then redirect user to frontend
+export const verifyEmailRedirect = async (req, res) => {
+  const { token } = req.params;
+  try {
+    const user = await User.findOne({
+      verificationToken: token,
+      verificationTokenExpire: { $gt: Date.now() },
+    });
+
+    const clientBase = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:3000';
+
+    if (!user) {
+      // Redirect to frontend with error query
+      const redirectUrl = `${clientBase}/verify-email?status=error&message=invalid_token`;
+      return res.redirect(redirectUrl);
+    }
+
+    user.isEmailVerified = true;
+    user.verificationToken = undefined;
+    user.verificationTokenExpire = undefined;
+    await user.save();
+
+    // Redirect to frontend login with success flag
+    const redirectUrl = `${clientBase}/login?verified=1`;
+    return res.redirect(redirectUrl);
+  } catch (error) {
+    console.error('Error in verifyEmailRedirect:', error);
+    const clientBase = process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:3000';
+    return res.redirect(`${clientBase}/verify-email?status=error&message=server_error`);
+  }
+};
+
 // ✅ Resend verification email
 export const resendVerificationEmail = async (req, res) => {
   const { email } = req.body;
@@ -350,8 +383,9 @@ export const resendVerificationEmail = async (req, res) => {
     user.verificationTokenExpire = verificationTokenExpire;
     await user.save();
 
-    // Send verification email
-    const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+    // Send verification email -> point to backend verify endpoint
+    const backendBase = process.env.SERVER_URL || process.env.API_URL || `http://localhost:${process.env.PORT || 5000}`;
+    const verificationUrl = `${backendBase}/api/auth/verify-email/${verificationToken}`;
 
     const html = `
       <div style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f7f8fa; padding: 40px 0;">

@@ -6,6 +6,7 @@ import {
   requestPasswordReset,
   resetPassword,
   verifyEmail,
+  verifyEmailRedirect,
   resendVerificationEmail,
   googleAuthCallback,
   getGoogleUser,
@@ -18,6 +19,8 @@ const router = express.Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/verify-email/:token", verifyEmail);
+// Allow GET requests from email clients to verify and then redirect to frontend
+router.get("/verify-email/:token", verifyEmailRedirect || verifyEmail);
 router.post("/resend-verification-email", resendVerificationEmail);
 // Convenience GET route for quick resend via URL (careful: exposes email in URL)
 router.get("/resend-verification-email/:email", async (req, res) => {
