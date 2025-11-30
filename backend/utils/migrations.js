@@ -10,7 +10,7 @@ export const runMigrations = async () => {
     // Migration 1: Add isEmailVerified field to existing users
     const result = await User.updateMany(
       { isEmailVerified: { $exists: false } },
-      { $set: { isEmailVerified: false } }
+      { $set: { isEmailVerified: true } }
     );
 
     if (result.modifiedCount > 0) {
