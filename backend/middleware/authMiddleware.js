@@ -20,8 +20,11 @@ export const protect = async (req, res, next) => {
       res.status(401).json({ message: 'User not found' });
       return;
     }
-    // Deny access if email not verified
-    if (!req.user.isEmailVerified) {
+    // Deny access if email not verified (handle old records without field)
+    // For local auth: require verification. For Google auth: auto-verified
+    const authProvider = req.user.authProvider || 'local';
+    const isVerified = req.user.isEmailVerified === true || authProvider === 'google';
+    if (!isVerified) {
       res.status(403).json({ message: 'Email not verified. Please verify your email to access this resource.' });
       return;
     }
@@ -50,8 +53,10 @@ export const agentProtect = async (req, res, next) => {
       res.status(401).json({ message: 'Agent not found' });
       return;
     }
-    // Deny access if email not verified for agent
-    if (!req.user.isEmailVerified) {
+    // Deny access if email not verified for agent (handle old records)
+    const agentProvider = req.user.authProvider || 'local';
+    const agentIsVerified = req.user.isEmailVerified === true || agentProvider === 'google';
+    if (!agentIsVerified) {
       res.status(403).json({ message: 'Email not verified. Please verify your email to access this resource.' });
       return;
     }

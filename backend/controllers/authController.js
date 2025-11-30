@@ -137,8 +137,10 @@ export const loginUser = async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ message: "Invalid email or password" });
     
-    // Block login if email not verified
-    if (!user.isEmailVerified) {
+    // Block login if email not verified (handle old records without the field)
+    // For local auth users: require verification
+    // For Google auth: auto-verified, so skip check
+    if (user.authProvider !== 'google' && !user.isEmailVerified) {
       return res.status(403).json({
         success: false,
         message: "Email not verified. Please verify your email before logging in.",
