@@ -19,6 +19,18 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/verify-email/:token", verifyEmail);
 router.post("/resend-verification-email", resendVerificationEmail);
+// Convenience GET route for quick resend via URL (careful: exposes email in URL)
+router.get("/resend-verification-email/:email", async (req, res) => {
+  try {
+    const { email } = req.params;
+    // reuse controller logic
+    // call the controller function which expects req.body.email — adapt via req.body override
+    req.body = { email };
+    await resendVerificationEmail(req, res);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to resend verification email', error: error.message });
+  }
+});
 router.post("/forgot-password", requestPasswordReset);
 router.post("/reset-password/:token", resetPassword);
 

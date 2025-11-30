@@ -93,11 +93,28 @@ export const registerUser = async (req, res) => {
       </div>
     `;
 
-    await sendEmail(email, "Verify Your Email Address", html);
+    let emailSent = true;
+    try {
+      await sendEmail(email, "Verify Your Email Address", html);
+    } catch (emailError) {
+      emailSent = false;
+      console.error("Failed to send verification email for user:", email, emailError.message || emailError);
+    }
 
+    if (emailSent) {
+      return res.status(201).json({
+        success: true,
+        message: "Account registered successfully. Please check your email to verify your account.",
+      });
+    }
+
+    // Account created but email failed to send
     res.status(201).json({
       success: true,
-      message: "Account registered successfully. Please check your email to verify your account.",
+      message: "Account created successfully, but we were unable to send the verification email.",
+      resendVerification: true,
+      resendEndpoint: "/api/auth/resend-verification-email",
+      note: "Please contact support or use the resend endpoint to receive a verification email.",
     });
   } catch (error) {
     res.status(500).json({
