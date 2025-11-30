@@ -137,3 +137,12 @@ export const setDiscountedCarousel = async (req, res) => {
     res.status(500).json({ message: 'Error updating carousel', error: error.message });
   }
 };
+
+export const getAdmins = async (req, res) => {
+  try {
+    const admins = await User.find({ role: 'admin' });
+    res.json(admins);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching admins', error: error.message });
+  }
+};

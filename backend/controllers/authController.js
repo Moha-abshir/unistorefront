@@ -401,3 +401,81 @@ export const resendVerificationEmail = async (req, res) => {
     });
   }
 };
+
+// ✅ Google OAuth Callback Handler
+export const googleAuthCallback = async (req, res) => {
+  try {
+    const { id, email, displayName, photos } = req.user;
+
+    // Check if user already exists
+    let user = await User.findOne({ googleId: id });
+
+    if (!user) {
+      // Create new user from Google profile
+      user = await User.create({
+        name: displayName || email.split("@")[0],
+        email,
+        googleId: id,
+        authProvider: "google",
+        profilePicture: photos?.[0]?.value || null,
+        isEmailVerified: true, // Google accounts are automatically verified
+      });
+    }
+
+    // Generate JWT token
+    const token = generateToken(user);
+
+    // Redirect to frontend with token
+    const frontendUrl = `${process.env.CLIENT_URL}/auth-success?token=${token}&email=${user.email}&name=${user.name}`;
+    res.redirect(frontendUrl);
+  } catch (error) {
+    console.error("Google Auth Error:", error);
+    res.redirect(`${process.env.CLIENT_URL}/login?error=authentication_failed`);
+  }
+};
+
+// ✅ Check if user exists with Google ID
+export const getGoogleUser = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: "Not authenticated" });
+    }
+
+    const user = await User.findOne({ googleId: req.user.id });
+    res.json({ success: true, user, authenticated: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// ✅ Link Google account to existing user (optional)
+export const linkGoogleAccount = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { googleId, email, displayName, profilePicture } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (user.googleId) {
+      return res.status(400).json({ message: "Google account already linked" });
+    }
+
+    user.googleId = googleId;
+    user.authProvider = "both";
+    user.profilePicture = profilePicture;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Google account linked successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to link Google account",
+      error: error.message,
+    });
+  }
+};

@@ -5,6 +5,8 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import session from "express-session";
+import passport from "./config/passport.js";
 
 import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
@@ -38,6 +40,8 @@ app.use(
       "https://muzafey.online",
       "https://www.muzafey.online",
        // local dev
+      "http://localhost:3000",
+      "http://localhost:3001",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -50,6 +54,24 @@ app.options("*", cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+
+// ✅ Session Configuration for Passport
+app.use(
+  session({
+    secret: process.env.JWT_SECRET || "your_session_secret_key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  })
+);
+
+// ✅ Passport Initialization
+app.use(passport.initialize());
+app.use(passport.session());
 
 // ✅ API Routes
 app.use("/api/auth", authRoutes);

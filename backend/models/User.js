@@ -32,6 +32,11 @@ const userSchema = new mongoose.Schema(
     isEmailVerified: { type: Boolean, default: false },
     verificationToken: { type: String },
     verificationTokenExpire: { type: Date },
+
+    // 🔐 Google OAuth fields
+    googleId: { type: String, sparse: true },
+    authProvider: { type: String, enum: ['local', 'google'], default: 'local' },
+    profilePicture: { type: String },
   },
   { timestamps: true }
 );
