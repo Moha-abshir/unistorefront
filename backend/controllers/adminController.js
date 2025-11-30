@@ -146,3 +146,66 @@ export const getAdmins = async (req, res) => {
     res.status(500).json({ message: 'Error fetching admins', error: error.message });
   }
 };
+
+// ✅ Get list of unverified customers
+export const getUnverifiedCustomers = async (req, res) => {
+  try {
+    const unverifiedUsers = await User.find(
+      { isEmailVerified: false },
+      { _id: 1, name: 1, email: 1, createdAt: 1, verificationToken: 1 }
+    ).sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      count: unverifiedUsers.length,
+      users: unverifiedUsers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching unverified customers',
+      error: error.message,
+    });
+  }
+};
+
+// ✅ Admin verifies a customer email
+export const verifyCustomerEmail = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        isEmailVerified: true,
+        verificationToken: undefined,
+        verificationTokenExpire: undefined,
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Customer not found',
+      });
+    }
+
+    res.json({
+      success: true,
+      message: `Customer ${user.email} verified successfully`,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isEmailVerified: user.isEmailVerified,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error verifying customer',
+      error: error.message,
+    });
+  }
+};
