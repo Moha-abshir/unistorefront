@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAdminStats, getDiscountedCarousel, setDiscountedCarousel } from '../controllers/adminController.js';
+import { getAdminStats, getDiscountedCarousel, setDiscountedCarousel, getAdmins } from '../controllers/adminController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 import { setAdminPin, verifyAdminPin, getAdminLockStatus, toggleAppLock } from '../controllers/appLockController.js';
 
@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('/stats', getAdminStats);
 router.get('/dashboard-data', getAdminStats);
+router.get('/admins', protect, admin, getAdmins);
 
 // ✅ Discount Carousel endpoints
 router.get('/discounted-carousel', getDiscountedCarousel);
