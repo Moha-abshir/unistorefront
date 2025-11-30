@@ -4,12 +4,16 @@ import {
   loginUser,
   requestPasswordReset,
   resetPassword,
+  verifyEmail,
+  resendVerificationEmail,
 } from "../controllers/authController.js";
 
 const router = express.Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.post("/verify-email/:token", verifyEmail);
+router.post("/resend-verification-email", resendVerificationEmail);
 router.post("/forgot-password", requestPasswordReset);
 router.post("/reset-password/:token", resetPassword);
 
